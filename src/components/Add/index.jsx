@@ -1,13 +1,12 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import {
-    Button,
     Text,
+    Flex,
     Input,
 
     Modal,
     ModalContent,
     ModalHeader,
-    ModalCloseButton,
     ModalBody,
     ModalFooter,
     ModalOverlay,
@@ -18,19 +17,40 @@ import {
 import { useApp } from '../../context';
 
 export function Add() {
-    const { openAdd, setOpenAdd } = useApp()
+    const { openAdd, setOpenAdd, addData } = useApp()
+    const [priority, setPriority] = useState(0)
+    const [title, setTitle] = useState('')
+    const [description, setDescription] = useState('')
 
-    const initialRef = useRef(null)
-    const finalRef = useRef(null)
+    const handlePriority = e => {
+        if (e.target.value) 
+            setPriority(Number(e.target.value))
+    }
+
+    const handleClose = () => {
+        setOpenAdd.off()
+        resetStates()
+    }
+
+    const resetStates = () => {
+        setPriority(0)
+        setTitle('')
+        setDescription('')
+    }
+
+    const saveData = () => {
+        if (title && description) {
+            addData(title, description, priority)
+            setOpenAdd.off()
+        }
+    }
     
     return (
         <>
             <Modal
                 isCentered
-                initialFocusRef={initialRef}
-                finalFocusRef={finalRef}
                 isOpen={openAdd}
-                onClose={setOpenAdd.off}
+                onClose={handleClose}
             >
                 <ModalOverlay
                     bg='blackAlpha.300'
@@ -40,7 +60,7 @@ export function Add() {
                 <ModalContent
                     flexDir='column'
                     align='center'
-                    height='200px'
+                    height='fit-content'
                     w='80%'
                     margin='50px auto'
                     gap='20px'
@@ -49,23 +69,107 @@ export function Add() {
                     borderRadius='15px'
                     border='1px solid silver'
                 >
-                    <ModalHeader>Title</ModalHeader>
-                    <ModalBody margin='0 auto'>
+                    <ModalHeader>
+                        <Text as='h1'>Add Item</Text>
+                    </ModalHeader>
+                    <ModalBody display='flex' flexDir='column' margin='0 auto' gap='10px'>
                         <FormControl>
-                            <FormLabel>Input 1</FormLabel>
-                            <Input ref={initialRef} placeholder='First name' />
-                            </FormControl>
-
-                            <FormControl mt={4}>
-                            <FormLabel>Input 2</FormLabel>
-                            <Input placeholder='Last name' />
+                            <FormLabel>
+                                <Text>Title</Text>
+                            </FormLabel>
+                            <Input
+                                w='100%'
+                                placeholder='Titulo'
+                                value={title}
+                                onChange={e => setTitle(e.target.value)} />
                         </FormControl>
+
+                        <FormControl>
+                            <FormLabel>
+                                <Text>Description</Text>
+                            </FormLabel>
+                            <Input
+                                w='100%'
+                                placeholder='Description'
+                                value={description}
+                                onChange={e => setDescription(e.target.value)}
+                            />
+                        </FormControl>
+
+                        <FormControl
+                            onChange={e => handlePriority(e)}
+                            display='flex'
+                            flexDir='column'
+                        >
+                            <FormLabel>
+                                <Text>Priority</Text>
+                            </FormLabel>
+
+                            <Flex flexDir='row' gap='15px'>
+
+                                <Flex align='center' gap='5px'>
+                                    <Input
+                                        type={'radio'}
+                                        value={0}
+                                        id="priority-1"
+                                        checked={priority === 0}
+                                    />
+                                    <label htmlFor="priority-1">Easy</label>
+                                </Flex>
+
+                                <Flex align='center' gap='5px'>
+                                    <Input
+                                        type={'radio'}
+                                        value={1}
+                                        id="priority-2"
+                                        checked={priority === 1}
+                                    />
+                                    <label htmlFor="priority-2">Medium</label>
+                                </Flex>
+
+                                <Flex align='center' gap='5px'>
+                                    <Input
+                                        type={'radio'}
+                                        value={2}
+                                        id="priority-3"
+                                        checked={priority === 2}
+                                    />
+                                    <label htmlFor="priority-3">Hard</label>
+                                </Flex>
+                            </Flex>
+
+                        </FormControl>
+
                     </ModalBody>
                     <ModalFooter gap='15px' margin='0 auto'>
-                        <Button colorScheme='blue' mr={3}>
+                        <Flex 
+                            as='button'
+                            onClick={saveData}
+                            w='80px'
+                            borderRadius='5px'
+                            cursor='pointer'
+                            align='center'
+                            justify='center'
+                            transition='all 0.25s ease'
+                            _hover={{
+                                bgColor: 'silver'
+                            }}
+                        >
                             Save
-                        </Button>
-                        <Button onClick={setOpenAdd.off}>Cancel</Button>
+                        </Flex>
+                        <Flex
+                            as='button'
+                            align='center'
+                            justify='center'
+                            onClick={handleClose}
+                            w='80px'
+                            borderRadius='5px'
+                            cursor='pointer'
+                            transition='all 0.25s ease'
+                            _hover={{
+                                bgColor: 'silver'
+                            }}
+                        >Cancel</Flex>
                     </ModalFooter>
                 </ModalContent>
             </Modal>

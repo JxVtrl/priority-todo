@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Accordion,
   AccordionItem,
@@ -15,11 +15,21 @@ import {
   IconButton,
   Box,
   Flex,
+  Text,
 } from '@chakra-ui/react';
 import { HamburgerIcon } from '@chakra-ui/icons'
 import { Add } from '../../components'
+import { useApp } from '../../context';
 
 export function Home() {
+  const { itemData } = useApp()
+  const [data, setData] = useState([])
+
+  useEffect(() => {
+    setData(itemData)
+  },[itemData])
+
+
   return (
     <Flex
       padding='0 20px'
@@ -46,22 +56,28 @@ export function Home() {
         </Menu>
       </Flex>
 
+      <Accordion allowToggle display='flex' flexDir='column' gap='15px'>
+        {data.map((item, idx) => (
+          <AccordionItem key={idx} >
+            <AccordionButton
+              cursor='pointer'
+              borderRadius='5px' borderColor={item.priority === 0 ? 'green' : item.priority === 1 ? 'yellow' : 'red'}
+            >
+              <Box flex='1' textAlign='left'>
+                <Text>
+                  {item.title}
+                </Text>
+              </Box>
+              <AccordionIcon />
+            </AccordionButton>
+            <AccordionPanel pb={4}>
+              <Text>
+                {item.description}
+              </Text>
+            </AccordionPanel>
+          </AccordionItem>
+        ))}
 
-      <Accordion allowToggle>
-        <AccordionItem>
-          <AccordionButton>
-            <Box flex='1' textAlign='left'>
-              Section 1 title
-            </Box>
-            <AccordionIcon />
-          </AccordionButton>
-          <AccordionPanel pb={4}>
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Culpa ex quaerat minima incidunt tempore consequatur deserunt velit nisi, voluptate provident recusandae autem odio voluptatibus dolorem accusamus optio sapiente a unde.
-          </AccordionPanel>
-        </AccordionItem>
-
-        {/* <AccordionItem>
-        </AccordionItem> */}
       </Accordion>
 
       <Add />

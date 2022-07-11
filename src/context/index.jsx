@@ -13,12 +13,25 @@ export function AppProvider({ children }) {
     const [darkMode, setDarkMode] = useBoolean()
     const [openAdd, setOpenAdd] = useBoolean()
 
+    const [itemData, setItemData] = useState([])
+
+    const addData = (title, description, priority) => {
+        setItemData([...itemData,
+            {
+                title: title,
+                description: description,
+                priority: priority
+            }
+        ])
+    }
 
     const value = {
         darkMode,
         setDarkMode,
         openAdd,
         setOpenAdd,
+        addData,
+        itemData
         
     }
 
