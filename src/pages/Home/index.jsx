@@ -5,81 +5,79 @@ import {
   AccordionButton,
   AccordionIcon,
   AccordionPanel,
-
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-
-
-  IconButton,
+  Checkbox,
   Box,
   Flex,
   Text,
 } from '@chakra-ui/react';
-import { HamburgerIcon } from '@chakra-ui/icons'
 import { Add } from '../../components'
 import { useApp } from '../../context';
-
 export function Home() {
-  const { itemData } = useApp()
+  const { itemData, setItemData } = useApp()
   const [data, setData] = useState([])
 
   useEffect(() => {
     setData(itemData)
-  },[itemData])
+    console.log(itemData)
+  }, [itemData])
+  
+  const handleDone = (id) => {
+    const newData = data.map(item => {
+      if (item.id === id) {
+        item.done = !item.done
+      }
+      return item
+    })
+    setItemData(newData)
+  }
 
 
   return (
     <Flex
-      padding='0 20px'
-      flexDir='column'
-      gap='12px'
-      position='relative'
+    h="100%"
+    padding='0 20px'
+    flexDir='column'
+    gap='12px'
+    position='relative'
     >
-      <Flex>
-        <Menu>
-          <MenuButton
-            as={IconButton}
-            aria-label='Options'
-            icon={<HamburgerIcon />}
-            variant='outline'
-            padding='5px'
-            borderRadius='5px'
-            
-          />
-          <MenuList>
-            <MenuItem>Priority</MenuItem>
-            <MenuItem>Date</MenuItem>
-            <MenuItem>...</MenuItem>
-          </MenuList>
-        </Menu>
-      </Flex>
-
-      <Accordion allowToggle display='flex' flexDir='column' gap='15px'>
+      <Accordion allowToggle display='flex' flexDir='column'>
         {data.map((item, idx) => (
           <AccordionItem key={idx} >
             <AccordionButton
               cursor='pointer'
-              borderRadius='5px' borderColor={item.priority === 0 ? 'green' : item.priority === 1 ? 'yellow' : 'red'}
+              h='45px'
+              padding='0 15px'
+              borderRadius='5px'
+              border='none'
             >
-              <Box flex='1' textAlign='left'>
-                <Text>
+              <Flex gap='10px' align='center' w='100%'>
+                <Box
+                  w='10px'
+                  h='10px'
+                  borderRadius='50%'
+                  bgColor={item.priority === '0' ? 'green' : item.priority === '1' ? 'yellow' : 'red'}
+                />
+                <Text
+                  align='left'
+                  decoration={item.done ? 'none' : 'line-through'}>
                   {item.title}
                 </Text>
-              </Box>
+              </Flex>
               <AccordionIcon />
             </AccordionButton>
-            <AccordionPanel pb={4}>
+            <AccordionPanel padding='10px 15px' >
               <Text>
                 {item.description}
               </Text>
+              <Checkbox
+                size='lg'
+                value='done'
+                onChange={() => handleDone(idx)}
+              >done</Checkbox>
             </AccordionPanel>
           </AccordionItem>
         ))}
-
       </Accordion>
-
       <Add />
     </Flex>
   );

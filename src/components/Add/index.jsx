@@ -1,8 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     Text,
     Flex,
     Input,
+    Button,
+    Radio,
+    RadioGroup,
+    Stack,
 
     Modal,
     ModalContent,
@@ -18,14 +22,13 @@ import { useApp } from '../../context';
 
 export function Add() {
     const { openAdd, setOpenAdd, addData } = useApp()
-    const [priority, setPriority] = useState(0)
+    const [priority, setPriority] = useState('0')
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState('')
 
-    const handlePriority = e => {
-        if (e.target.value) 
-            setPriority(Number(e.target.value))
-    }
+    useEffect(() => {
+        console.log(priority)
+    },[priority])
 
     const handleClose = () => {
         setOpenAdd.off()
@@ -41,6 +44,7 @@ export function Add() {
     const saveData = () => {
         if (title && description) {
             addData(title, description, priority)
+            resetStates()
             setOpenAdd.off()
         }
     }
@@ -59,20 +63,20 @@ export function Add() {
 
                 <ModalContent
                     flexDir='column'
-                    align='center'
-                    height='fit-content'
                     w='80%'
-                    margin='50px auto'
-                    gap='20px'
-                    padding='20px'
                     bgColor='white'
                     borderRadius='15px'
                     border='1px solid silver'
                 >
                     <ModalHeader>
-                        <Text as='h1'>Add Item</Text>
+                        <Text as='h1'>Add new item</Text>
                     </ModalHeader>
-                    <ModalBody display='flex' flexDir='column' margin='0 auto' gap='10px'>
+                    <ModalBody
+                        display='flex'
+                        flexDir='column'
+                        margin='0 auto'
+                        gap='10px'
+                    >
                         <FormControl>
                             <FormLabel>
                                 <Text>Title</Text>
@@ -97,7 +101,6 @@ export function Add() {
                         </FormControl>
 
                         <FormControl
-                            onChange={e => handlePriority(e)}
                             display='flex'
                             flexDir='column'
                         >
@@ -105,74 +108,42 @@ export function Add() {
                                 <Text>Priority</Text>
                             </FormLabel>
 
-                            <Flex flexDir='row' gap='15px'>
-
-                                <Flex align='center' gap='5px'>
-                                    <Input
-                                        type={'radio'}
-                                        value={0}
-                                        id="priority-1"
-                                        checked={priority === 0}
-                                    />
-                                    <label htmlFor="priority-1">Easy</label>
-                                </Flex>
-
-                                <Flex align='center' gap='5px'>
-                                    <Input
-                                        type={'radio'}
-                                        value={1}
-                                        id="priority-2"
-                                        checked={priority === 1}
-                                    />
-                                    <label htmlFor="priority-2">Medium</label>
-                                </Flex>
-
-                                <Flex align='center' gap='5px'>
-                                    <Input
-                                        type={'radio'}
-                                        value={2}
-                                        id="priority-3"
-                                        checked={priority === 2}
-                                    />
-                                    <label htmlFor="priority-3">Hard</label>
-                                </Flex>
-                            </Flex>
-
+                            <RadioGroup onChange={setPriority} defaultValue='0'>
+                                <Stack spacing={5} direction='row'>
+                                    <Radio colorScheme='green' value='0'>Easy</Radio>
+                                    <Radio colorScheme='yellow' value='1'>Medium</Radio>
+                                    <Radio colorScheme='red' value='2'>Hard</Radio>      
+                                </Stack>
+                            </RadioGroup>                          
                         </FormControl>
 
                     </ModalBody>
-                    <ModalFooter gap='15px' margin='0 auto'>
-                        <Flex 
-                            as='button'
+                    <ModalFooter gap='15px' flex='1' w='fit-content' margin='0 auto'>
+                        <Button 
                             onClick={saveData}
-                            w='80px'
+                            w='100px'
                             borderRadius='5px'
                             cursor='pointer'
-                            align='center'
-                            justify='center'
                             transition='all 0.25s ease'
                             _hover={{
                                 bgColor: 'silver'
                             }}
                         >
                             Save
-                        </Flex>
-                        <Flex
-                            as='button'
-                            align='center'
-                            justify='center'
+                        </Button>
+                        <Button
                             onClick={handleClose}
-                            w='80px'
+                            w='100px'
                             borderRadius='5px'
                             cursor='pointer'
                             transition='all 0.25s ease'
                             _hover={{
                                 bgColor: 'silver'
                             }}
-                        >Cancel</Flex>
+                        >Cancel</Button>
                     </ModalFooter>
                 </ModalContent>
             </Modal>
         </>
     );
-}
+} 

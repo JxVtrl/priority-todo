@@ -27,6 +27,7 @@ const RoutesDeclaration = () => {
       <Routes location={location} key={location.pathname}>
         <Route
           path={`/${home}`}
+          Exact
           element={
             <GlobalLayout>
               <Home />
@@ -35,6 +36,7 @@ const RoutesDeclaration = () => {
         />
         <Route
           path={`/${login}`}
+          Exact
           element={
             <LoginLayout>
               <Login />

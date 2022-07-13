@@ -20,7 +20,10 @@ export function AppProvider({ children }) {
             {
                 title: title,
                 description: description,
-                priority: priority
+                priority: priority,
+                done: false,
+                date: new Date().toLocaleDateString(),
+                id: itemData.length
             }
         ])
     }
@@ -31,6 +34,7 @@ export function AppProvider({ children }) {
         openAdd,
         setOpenAdd,
         addData,
+        setItemData,
         itemData
         
     }
