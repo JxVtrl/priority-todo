@@ -55,11 +55,11 @@ export function Home() {
                   w='10px'
                   h='10px'
                   borderRadius='50%'
-                  bgColor={item.priority === '0' ? 'green' : item.priority === '1' ? 'yellow' : 'red'}
+                  bgColor={item.priority == '0' ? 'green' : item.priority == '1' ? 'yellow' : 'red'}
                 />
                 <Text
                   align='left'
-                  decoration={item.done ? 'none' : 'line-through'}>
+                  decoration={item.done ? 'line-through' : 'none'}>
                   {item.title}
                 </Text>
               </Flex>
@@ -68,6 +68,7 @@ export function Home() {
             <AccordionPanel padding='10px 15px' >
               <Text>
                 {item.description}
+                {item.date}
               </Text>
               <Checkbox
                 size='lg'
