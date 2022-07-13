@@ -12,7 +12,6 @@ export function GlobalLayout({ children }) {
             w='100vw'
             h='100vh'
             flexDir='column'
-            overflow='hidden'
             transition='all 0.2s linear'
         >
             <Header />
