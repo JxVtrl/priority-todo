@@ -1,19 +1,35 @@
-import React, { createContext, useContext, useEffect, useState, useRef } from 'react'
+import React, {
+    createContext,
+    useContext,
+    useEffect,
+    useState,
+    useRef,
+} from 'react'
 import { useBoolean } from '@chakra-ui/react'
-
-// import { useNavigate } from 'react-router-dom'
-
-// import { auth } from '../services/firebase/firebase.js'
-// import { db } from '../services/firebase/firebase.js'
-// import { doc, collection, getDocs, addDoc, deleteDoc, updateDoc } from 'firebase/firestore'
+import { useFirebase } from './firebase'
 
 const AppContext = createContext()
 
 export function AppProvider({ children }) {
     const [darkMode, setDarkMode] = useBoolean()
     const [openAdd, setOpenAdd] = useBoolean()
+    const [itemEdit, setItemEdit] = useState({})
+    const [editModal, setEditModal] = useState(false)
 
-    const [itemData, setItemData] = useState([])
+    // const { sendFirebase } = useFirebase()
+
+    const [itemData, setItemData] = useState(
+        [
+            {
+                title: 'teste',
+                description: 'teste',
+                priority: 'easy',
+                done: false,
+                date: new Date().toLocaleDateString(),
+                id: 0
+            }
+        ]
+    )
 
     const addData = (title, description, priority) => {
         setItemData([...itemData,
@@ -28,15 +44,35 @@ export function AppProvider({ children }) {
         ])
     }
 
+    const editData = (title, description, priority, id) => {
+        setItemData(itemData.map(item => {
+            if (item.id === id) {
+                return {
+                    title: title,
+                    description: description,
+                    priority: priority,
+                    done: false,
+                    date: new Date().toLocaleDateString(),
+                    id: id
+                }
+            }
+            return item
+        }))
+    }
+
     const value = {
         darkMode,
         setDarkMode,
         openAdd,
         setOpenAdd,
+        editData,
         addData,
         setItemData,
-        itemData
-        
+        itemData,
+        setItemEdit,
+        itemEdit,
+        setEditModal,
+        editModal
     }
 
     return (

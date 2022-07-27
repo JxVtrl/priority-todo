@@ -21,13 +21,13 @@ import {
 
 import DatePicker from "react-datepicker";
 import subDays from "date-fns/subDays"
-import subHours from 'date-fns/subHours';
 import "react-datepicker/dist/react-datepicker.css";
 
-import { useApp } from '../../context';
+import { useApp, useFirebase } from '../../context';
 
 export function Add() {
-    const { openAdd, setOpenAdd, addData } = useApp()
+    const { openAdd, setOpenAdd } = useApp()
+    const { addTodo } = useFirebase()
 
     const [priority, setPriority] = useState('0')
     const [title, setTitle] = useState('')
@@ -47,7 +47,7 @@ export function Add() {
 
     const saveData = () => {
         if (title && description) {
-            addData(title, description, priority, date)
+            addTodo(title, description, priority, date)
             resetStates()
             setOpenAdd.off()
         }

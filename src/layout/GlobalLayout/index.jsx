@@ -11,6 +11,9 @@ export function GlobalLayout({ children }) {
             bgColor={darkMode ? '#313453' : '#fff'} 
             w='100vw'
             h='100vh'
+            maxW='900px'
+            margin='0 auto'
+            direction='column'
             flexDir='column'
             transition='all 0.2s linear'
         >
