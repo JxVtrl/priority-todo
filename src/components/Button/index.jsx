@@ -2,29 +2,18 @@ import React from 'react'
 import { Button as Btn, Text } from '@chakra-ui/react'
 import { useApp, useFirebase } from '../../context'
 
-export function Button({ children, type, item, itemData }) {
-    const { setEditModal, setItemEdit, setItemData } = useApp()
-    const { removeTodo } = useFirebase()
-    
+export function Button({ children, type, item }) {
+    const { setEditModal, setItemEdit } = useApp()
+    const { deleteTodo } = useFirebase()
 
-    const handleButtonClick = (i) => {
-        console.log(i)
+    const handleButtonClick = () => {
         switch (type) {
             case 'edit':
                 setEditModal(true)
-                setItemEdit(
-                    {
-                        date: i.date,
-                        description: i.description,
-                        done: i.done,
-                        id: i.id,
-                        priority: i.priority,
-                        title: i.title,
-                    }
-                )
+                setItemEdit(item)
                 break;
             case 'delete':
-                removeTodo(i.id)
+                deleteTodo(item)
                 break;
             default:
                 break;
@@ -47,7 +36,7 @@ export function Button({ children, type, item, itemData }) {
             _hover={{
                 bgColor: type === 'delete' ? '#fc5656' : '#b8b7b7' ,
             }}
-          onClick={()=>handleButtonClick(item)}
+            onClick={()=>handleButtonClick()}
       >
           <Text color='white'>
             {children}
