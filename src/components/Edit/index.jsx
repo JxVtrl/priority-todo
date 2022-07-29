@@ -7,8 +7,7 @@ import {
     ModalFooter,
     ModalBody,
     ModalCloseButton,
-   
-  Button,
+    Button,
     Input,
 } from '@chakra-ui/react'
 import { useApp } from '../../context'
@@ -23,7 +22,6 @@ export function Edit() {
 
   return (
     <>
-
       <Modal isOpen={editModal} onClose={handleClose}>
         <ModalOverlay />
         <ModalContent>
@@ -33,8 +31,6 @@ export function Edit() {
             <ModalCloseButton />
             <ModalBody>
                 
-                      
-
             </ModalBody>
             <ModalFooter>
                 <Button colorScheme='blue' mr={3} onClick={handleClose}>

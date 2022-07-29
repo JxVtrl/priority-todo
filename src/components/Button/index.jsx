@@ -3,8 +3,7 @@ import { Button as Btn, Text } from '@chakra-ui/react'
 import { useApp, useFirebase } from '../../context'
 
 export function Button({ children, type, item }) {
-    const { setEditModal, setItemEdit } = useApp()
-    const { deleteTodo } = useFirebase()
+    const { setEditModal, setItemEdit, setDeleteModal, setItemDelete } = useApp()
 
     const handleButtonClick = () => {
         switch (type) {
@@ -13,7 +12,8 @@ export function Button({ children, type, item }) {
                 setItemEdit(item)
                 break;
             case 'delete':
-                deleteTodo(item)
+                setDeleteModal(true)
+                setItemDelete(item)
                 break;
             default:
                 break;

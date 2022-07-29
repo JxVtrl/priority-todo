@@ -15,6 +15,8 @@ export function AppProvider({ children }) {
     const [openAdd, setOpenAdd] = useBoolean()
     const [itemEdit, setItemEdit] = useState({})
     const [editModal, setEditModal] = useState(false)
+    const [itemDelete, setItemDelete] = useState({})
+    const [deleteModal, setDeleteModal] = useState(false)
 
     // const { sendFirebase } = useFirebase()
 
@@ -72,7 +74,11 @@ export function AppProvider({ children }) {
         setItemEdit,
         itemEdit,
         setEditModal,
-        editModal
+        editModal,
+        setItemDelete,
+        itemDelete,
+        deleteModal,
+        setDeleteModal,
     }
 
     return (

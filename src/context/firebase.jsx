@@ -34,10 +34,6 @@ export function FirebaseProvider({ children }) {
         getTodos()
     }, [])
 
-    useEffect(() => {
-        console.log(todos)
-    },[todos])
-
     const addTodo = async (name, description, priority, date) => {
         const todo = {
             name,
@@ -51,7 +47,6 @@ export function FirebaseProvider({ children }) {
     }
 
     const deleteTodo = async item => {
-        console.log(item)
         setTodos(todos.filter(todo => todo.id !== item.id))
         await deleteDoc(doc(db, "to-do", item.id));
     }

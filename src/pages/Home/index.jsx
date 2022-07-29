@@ -10,7 +10,7 @@ import {
   Flex,
   Text,
 } from '@chakra-ui/react';
-import { Add, Button as MyButton, Edit } from '../../components'
+import { Add, Button as MyButton, Delete, Edit } from '../../components'
 import { useApp, useFirebase } from '../../context';
 export function Home() {
   const { itemData } = useApp()
@@ -36,10 +36,11 @@ export function Home() {
       position='relative'
     >
       <Accordion allowToggle display='flex' flexDir='column'>
-        {todos.map((item, idx) => <Item item={item} idx={idx} />)}
+        {todos.map((item, idx) => <Item key={idx} item={item} idx={idx} />)}
       </Accordion>
       <Add />
       <Edit />
+      <Delete />
     </Flex>
   );
 }
