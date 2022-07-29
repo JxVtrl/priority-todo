@@ -46,28 +46,12 @@ export function AppProvider({ children }) {
         ])
     }
 
-    const editData = (title, description, priority, id) => {
-        setItemData(itemData.map(item => {
-            if (item.id === id) {
-                return {
-                    title: title,
-                    description: description,
-                    priority: priority,
-                    done: false,
-                    date: new Date().toLocaleDateString(),
-                    id: id
-                }
-            }
-            return item
-        }))
-    }
 
     const value = {
         darkMode,
         setDarkMode,
         openAdd,
         setOpenAdd,
-        editData,
         addData,
         setItemData,
         itemData,

@@ -1,42 +1,75 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
-    Modal,
-    ModalOverlay,
-    ModalContent,
-    ModalHeader,
-    ModalFooter,
-    ModalBody,
-    ModalCloseButton,
-    Button,
-    Input,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  Button,
+  Input,
+  Text,
 } from '@chakra-ui/react'
-import { useApp } from '../../context'
+import { useApp, useFirebase } from '../../context'
 
 export function Edit() {
-    const { itemEdit, editModal, setEditModal, setItemEdit, editData } = useApp()
+  const { itemEdit, editModal, setEditModal, setItemEdit } = useApp()
+  const { updateTodo } = useFirebase()
 
-    const handleClose = () => {
-        setEditModal(false)
-        setItemEdit({})
-    }
+  const [newName, setNewName] = useState('')
+  const [newDescription, setNewDescription] = useState('')
+  const [newPriority, setNewPriority] = useState('')
+  const [newDate, setNewDate] = useState('')
+
+  useEffect(() => {
+    setNewName(itemEdit.name)
+    setNewDescription(itemEdit.description)
+    setNewPriority(itemEdit.priority)
+    setNewDate(itemEdit.date)
+  }, [itemEdit])
+
+  const handleClose = () => {
+    setEditModal(false)
+    setItemEdit({})
+  }
+
+  const handleSubmit = () => {
+    updateTodo({
+      id: itemEdit.id,
+      name: newName,
+      description: newDescription,
+      priority: newPriority,
+      date: newDate,
+    })
+    setEditModal(false)
+    setItemEdit({})
+  }
 
   return (
     <>
       <Modal isOpen={editModal} onClose={handleClose}>
-        <ModalOverlay />
+        <ModalOverlay
+          bg='blackAlpha.300'
+          backdropFilter='blur(10px) hue-rotate(90deg)'
+        />
         <ModalContent>
           <ModalHeader>
-            <Input w='80%' placeholder='Title' value={itemEdit?.title} />
+            <Text>
+              Edit item
+            </Text>
           </ModalHeader>
             <ModalCloseButton />
             <ModalBody>
+              <Input w='80%' placeholder='Title' value={newName} onChange={e=>setNewName(e.target.value)} />
+              <Input w='80%' placeholder='Description' value={newDescription} onChange={e=>setNewDescription(e.target.value)} />
                 
             </ModalBody>
             <ModalFooter>
                 <Button colorScheme='blue' mr={3} onClick={handleClose}>
                 Cancel
                 </Button>
-                <Button variant='ghost'>Save</Button>
+                <Button onClick={handleSubmit} variant='ghost'>Save</Button>
             </ModalFooter>
         </ModalContent>
       </Modal>

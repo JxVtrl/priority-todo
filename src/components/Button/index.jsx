@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button as Btn, Text } from '@chakra-ui/react'
-import { useApp, useFirebase } from '../../context'
+import { useApp } from '../../context'
 
 export function Button({ children, type, item }) {
     const { setEditModal, setItemEdit, setDeleteModal, setItemDelete } = useApp()
@@ -19,8 +19,6 @@ export function Button({ children, type, item }) {
                 break;
         }
     }
-
-
 
     return (
       <Btn

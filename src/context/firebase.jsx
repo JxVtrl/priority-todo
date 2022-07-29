@@ -6,7 +6,7 @@ import React, {
     useRef,
 } from 'react'
 import { db } from '../services/firebaseConfig'
-import { collection, getDocs, addDoc, deleteDoc, doc } from 'firebase/firestore'
+import { collection, getDocs, addDoc, deleteDoc, doc, updateDoc } from 'firebase/firestore'
 import { useTools } from './tools'
 const FirebaseContext = createContext()
 
@@ -41,9 +41,20 @@ export function FirebaseProvider({ children }) {
             priority,
             date: formatDate(date),
         }
-
-        setTodos([...todos, todo])
         await addDoc(todosCollection, todo)
+        getTodos()
+    }
+
+    const updateTodo = async (item) => {
+        const todo = {
+            name: item.name,
+            description: item.description,
+            priority: item.priority,
+            date: item.date,
+            id: item.id,
+        }
+        await updateDoc(doc(todosCollection, item.id), todo)
+        getTodos()
     }
 
     const deleteTodo = async item => {
@@ -56,7 +67,8 @@ export function FirebaseProvider({ children }) {
     const value = {
         todos,
         addTodo,
-        deleteTodo
+        deleteTodo,
+        updateTodo
 
     }
 
