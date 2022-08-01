@@ -11,22 +11,25 @@ import {
   Input,
   Text,
 } from '@chakra-ui/react'
-import { useApp, useFirebase } from '../../context'
+import { useApp, useFirebase, useTools } from '../../context'
 
 export function Edit() {
   const { itemEdit, editModal, setEditModal, setItemEdit } = useApp()
+  const { formatDateBack } = useTools()
   const { updateTodo } = useFirebase()
 
   const [newName, setNewName] = useState('')
   const [newDescription, setNewDescription] = useState('')
   const [newPriority, setNewPriority] = useState('')
-  const [newDate, setNewDate] = useState('')
+  const [newDate, setNewDate] = useState('00-00-0000')
+  const [newHour, setNewHour] = useState('00:00')
 
   useEffect(() => {
     setNewName(itemEdit.name)
     setNewDescription(itemEdit.description)
     setNewPriority(itemEdit.priority)
-    setNewDate(itemEdit.date)
+    setNewDate(itemEdit.date?.replaceAll('/', '-'))
+    setNewHour(itemEdit.hour)
   }, [itemEdit])
 
   const handleClose = () => {
@@ -35,15 +38,19 @@ export function Edit() {
   }
 
   const handleSubmit = () => {
-    updateTodo({
-      id: itemEdit.id,
-      name: newName,
-      description: newDescription,
-      priority: newPriority,
-      date: newDate,
-    })
-    setEditModal(false)
+    if (newName && newDate && newHour) {
+      updateTodo({
+        id: itemEdit.id,
+        name: newName,
+        description: newDescription,
+        priority: newPriority,
+        date: newDate,
+        hour: newHour,
+        done: itemEdit.done,
+      })
+    }
     setItemEdit({})
+    setEditModal(false)
   }
 
   return (
@@ -62,7 +69,14 @@ export function Edit() {
             <ModalCloseButton />
             <ModalBody>
               <Input w='80%' placeholder='Title' value={newName} onChange={e=>setNewName(e.target.value)} />
-              <Input w='80%' placeholder='Description' value={newDescription} onChange={e=>setNewDescription(e.target.value)} />
+            <Input w='80%' placeholder='Description' value={newDescription} onChange={e => setNewDescription(e.target.value)} />
+            <Input
+              placeholder="Select Date and Time"
+              size="md"
+              type="datetime-local"
+              value={formatDateBack(newDate, newHour)}
+              onChange={e => { setNewDate(e.target.value.split('T')[0]); setNewHour(e.target.value.split('T')[1]) }}
+            />
                 
             </ModalBody>
             <ModalFooter>

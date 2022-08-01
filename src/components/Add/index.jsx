@@ -19,10 +19,6 @@ import {
     FormLabel,
 } from '@chakra-ui/react'
 
-import DatePicker from "react-datepicker";
-import subDays from "date-fns/subDays"
-import "react-datepicker/dist/react-datepicker.css";
-
 import { useApp, useFirebase } from '../../context';
 
 export function Add() {
@@ -33,6 +29,7 @@ export function Add() {
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState('')
     const [date, setDate] = useState(new Date());
+    const [hour, setHour] = useState(new Date().getHours());
 
     const handleClose = () => {
         setOpenAdd.off()
@@ -43,11 +40,13 @@ export function Add() {
         setPriority(0)
         setTitle('')
         setDescription('')
+        setDate(new Date())
+        setHour(new Date().getHours())
     }
 
     const saveData = () => {
-        if (title && description) {
-            addTodo(title, description, priority, date)
+        if (title && date && hour) {
+            addTodo(title, description, priority, date, hour)
             resetStates()
             setOpenAdd.off()
         }
@@ -83,6 +82,7 @@ export function Add() {
                         margin='0 auto'
                         gap='25px'
                     >
+                        {/* Title */}
                         <FormControl gap='5px'>
                             <FormLabel>
                                 <Text>Title</Text>
@@ -95,7 +95,7 @@ export function Add() {
                         </FormControl>
 
 
-
+                        {/* Description */}
                         <FormControl>
                             <FormLabel>
                                 <Text>Description</Text>
@@ -109,7 +109,7 @@ export function Add() {
                         </FormControl>
 
 
-                        
+                        {/* Priority */}
                         <FormControl
                             display='flex'
                             flexDir='column'
@@ -126,26 +126,24 @@ export function Add() {
                             </RadioGroup>                          
                         </FormControl>
 
+                        
+                        {/* Date */}
                         <FormControl>
                             <FormLabel>
                                 <Text>Date</Text>
                             </FormLabel>
                             <Flex w='100%'>
-                                <DatePicker
-                                    selected={date}
-                                    onChange={(e) => setDate(e)}
-                                    closeOnScroll={true}
-                                    shouldCloseOnSelect={true}
-                                    minDate={subDays(new Date(), 0)}
-                                    timeIntervals={15}
-                                    placeholderText="Click to select a date"
-                                    dateFormat="MMMM d, yyyy"
+                                <Input
+                                    placeholder="Select Date and Time"
+                                    size="md"
+                                    type="datetime-local"
+                                    onChange={e => {
+                                        setDate(e.target.value.split('T')[0])
+                                        setHour(e.target.value.split('T')[1])
+                                    }}
                                 />
                             </Flex>
                         </FormControl>
-
-
-                        
                     </ModalBody>
 
 

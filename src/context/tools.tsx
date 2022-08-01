@@ -10,24 +10,26 @@ const ToolsContext = createContext({})
 
 export function ToolsProvider({ children }) {
     
-    const formatDate = (date) => {
-        const d = new Date(date)
-        let string = `${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()}`
-        let stringSplit = string.split('/') 
+    const formatDate = (date: any) => {
+        const newDate = date.split('-')
+        return `${newDate[2]}/${newDate[1]}/${newDate[0]}`
+    }
 
-        if (Number(stringSplit[0]) < 10) {
-            stringSplit[0] = `0${stringSplit[0]}`
-        } else if (Number(stringSplit[1]) < 10) {
-            stringSplit[1] = `0${stringSplit[1]}`
-        } else if (Number(stringSplit[2]) < 10) {
-            stringSplit[2] = `0${stringSplit[2]}`
+    const formatDateBack = (date: any, hour: any) => {
+        if (hour && date){
+            const newDate = date.split('-')
+            if (newDate[0].length === 4) {
+                return `${newDate[0]}-${newDate[1]}-${newDate[2]}T${hour}`
+            } else {
+                return `${newDate[2]}-${newDate[1]}-${newDate[0]}T${hour}`
+            }
         }
-
-        return stringSplit.join('/')
+       
     }
 
     const value = {
-        formatDate
+        formatDate,
+        formatDateBack
 
     }
 

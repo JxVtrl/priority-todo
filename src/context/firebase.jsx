@@ -34,12 +34,14 @@ export function FirebaseProvider({ children }) {
         getTodos()
     }, [])
 
-    const addTodo = async (name, description, priority, date) => {
+    const addTodo = async (name, description, priority, date, hour) => {
         const todo = {
             name,
             description,
             priority,
             date: formatDate(date),
+            hour,
+            done: false,
         }
         await addDoc(todosCollection, todo)
         getTodos()
@@ -51,7 +53,23 @@ export function FirebaseProvider({ children }) {
             description: item.description,
             priority: item.priority,
             date: item.date,
+            hour: item.hour,
+            done: item.done,
             id: item.id,
+        }
+        await updateDoc(doc(todosCollection, item.id), todo)
+        getTodos()
+    }
+
+    const updateDone = async (item) => {
+        const todo = {
+            name: item.name,
+            description: item.description,
+            priority: item.priority,
+            date: item.date,
+            hour: item.hour,
+            id: item.id,
+            done: !item.done,
         }
         await updateDoc(doc(todosCollection, item.id), todo)
         getTodos()
@@ -68,7 +86,8 @@ export function FirebaseProvider({ children }) {
         todos,
         addTodo,
         deleteTodo,
-        updateTodo
+        updateTodo,
+        updateDone
 
     }
 
