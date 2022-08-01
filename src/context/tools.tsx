@@ -11,8 +11,12 @@ const ToolsContext = createContext({})
 export function ToolsProvider({ children }) {
     
     const formatDate = (date: any) => {
-        const newDate = date.split('-')
-        return `${newDate[2]}/${newDate[1]}/${newDate[0]}`
+        if (date.includes('-')) {
+            const newDate = date.split('-')
+            return `${newDate[2]}/${newDate[1]}/${newDate[0]}`
+        } else {
+            return date
+        }
     }
 
     const formatDateBack = (date: any, hour: any) => {
