@@ -17,7 +17,7 @@ export function Home() {
       margin='0 auto'
       padding='0 20px'
       flexDir='column'
-      overflow='auto'
+      // overflow='auto'
       overflowX='hidden'
       gap='12px'
       position='relative'
