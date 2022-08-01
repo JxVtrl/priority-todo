@@ -42,10 +42,10 @@ function ItemHeader({ item }) {
           <Checkbox
             size='md'
             value='done'
+            defaultChecked={item.done}
             onChange={() => updateDone(item)}
             fontWeight={item.done ? '600' : '300'}
-          >
-          </Checkbox>
+          />
           <Text
             align='left'
             decoration={item.done ? 'line-through' : 'none'}
