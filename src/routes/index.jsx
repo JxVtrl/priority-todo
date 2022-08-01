@@ -13,13 +13,6 @@ import {
   Navigate,
 } from 'react-router-dom'
 
-export const routesObject = {
-  home: 'home',
-  login: 'login'
-}
-
-const { home, login } = routesObject
-
 const RoutesDeclaration = () => {
   const location = useLocation()
 
@@ -27,7 +20,7 @@ const RoutesDeclaration = () => {
     <AnimatePresence exitBeforeEnter>
       <Routes location={location} key={location.pathname}>
         <Route
-          path={`/${home}`}
+          path={`/`}
           Exact
           element={
             // <PrivateRoute>
@@ -38,7 +31,7 @@ const RoutesDeclaration = () => {
           }
         />
         <Route
-          path={`/${login}`}
+          path={`/login`}
           Exact
           element={
             <LoginLayout>
@@ -48,7 +41,7 @@ const RoutesDeclaration = () => {
         />
         <Route
           path="*"
-          element={<Navigate to={`/${home}`} replace />}
+          element={<Navigate to={`/`} replace />}
         />
       </Routes>
     </AnimatePresence>
