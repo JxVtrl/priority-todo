@@ -1,11 +1,11 @@
 import React from 'react';
 import { Flex } from '@chakra-ui/react';
 import { AddIcon } from '@chakra-ui/icons';
-import { useApp } from '../../context';
+import { useTools } from '../../context';
 // import { Container } from './styles';
 
 export function Footer() {
-  const { setOpenAdd, darkMode } = useApp()
+  const { setOpenAdd, darkMode } = useTools()
 
   return (
     <Flex

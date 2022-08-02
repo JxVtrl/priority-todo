@@ -12,7 +12,7 @@ import {
 
 import { SunIcon, MoonIcon, HamburgerIcon } from '@chakra-ui/icons';
 import { Logo } from '../../components';
-import { useApp, useFirebase } from '../../context';
+import { useTools, useFirebase } from '../../context';
 
 export function Header() {  
   return (
@@ -57,7 +57,7 @@ function HeaderContent() {
 }
 
 function HeaderIcons() {
-  const { darkMode, setDarkMode } = useApp()
+  const { darkMode, setDarkMode } = useTools()
 
   return (
     <Flex
@@ -76,7 +76,7 @@ function HeaderIcons() {
 }
 
 function HeaderFilter() {
-  const { darkMode } = useApp()
+  const { darkMode } = useTools()
 
   return (
     <Flex>

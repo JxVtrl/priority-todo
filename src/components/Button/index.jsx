@@ -1,9 +1,9 @@
 import React from 'react'
 import { Button as Btn, Text } from '@chakra-ui/react'
-import { useApp } from '../../context'
+import { useTools } from '../../context'
 
 export function Button({ children, type, item }) {
-    const { setEditModal, setItemEdit, setDeleteModal, setItemDelete } = useApp()
+    const { setEditModal, setItemEdit, setDeleteModal, setItemDelete } = useTools()
 
     const handleButtonClick = () => {
         switch (type) {

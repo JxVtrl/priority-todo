@@ -11,10 +11,10 @@ import {
   Button,
     Input,
 } from '@chakra-ui/react'
-import { useApp, useFirebase } from '../../context'
+import { useTools, useFirebase } from '../../context'
 
 export function Delete() {
-  const { deleteModal, setDeleteModal, itemDelete, setItemDelete } = useApp()
+  const { deleteModal, setDeleteModal, itemDelete, setItemDelete } = useTools()
   const { deleteTodo } = useFirebase()
 
   const handleClose = () => {

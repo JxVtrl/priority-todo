@@ -19,10 +19,10 @@ import {
   Textarea
 } from '@chakra-ui/react'
 import { AddIcon, DeleteIcon } from '@chakra-ui/icons'
-import { useApp, useFirebase, useTools } from '../../context'
+import { useTools, useFirebase } from '../../context'
 
 export function Edit() {
-  const { itemEdit, editModal, setEditModal, setItemEdit } = useApp() 
+  const { itemEdit, editModal, setEditModal, setItemEdit } = useTools() 
 
   const [newObj, setNewObj] = useState({
     name: itemEdit.name,
@@ -71,7 +71,7 @@ export function Edit() {
 
 
 function EditBody({ editObj, setEditObj }) {
-  const { itemEdit } = useApp()
+  const { itemEdit } = useTools()
 
   return (
     <ModalBody gap='15px' display='flex' flexDir='column' pos='relative'>
@@ -163,7 +163,7 @@ function EditBody({ editObj, setEditObj }) {
 }
 
 function EditFooter({ close, editObj }) {
-  const { itemEdit, setEditModal, setItemEdit } = useApp()
+  const { itemEdit, setEditModal, setItemEdit } = useTools()
   const { editTodo } = useFirebase()
 
   const handleSubmit = () => {

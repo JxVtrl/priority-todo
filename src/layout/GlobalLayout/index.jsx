@@ -1,10 +1,10 @@
 import React from 'react';
 import { Flex } from '@chakra-ui/react'
-import { useApp } from '../../context';
+import { useTools } from '../../context';
 import { Header, Footer } from '../../section';
 
 export function GlobalLayout({ children }) {
-    const { darkMode } = useApp()
+    const { darkMode } = useTools()
 
     return (
         <Flex

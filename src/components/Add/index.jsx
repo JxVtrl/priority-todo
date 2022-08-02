@@ -21,10 +21,10 @@ import {
 
 import { AddIcon, DeleteIcon } from '@chakra-ui/icons'
 
-import { useApp, useFirebase } from '../../context';
+import { useTools, useFirebase } from '../../context';
 
 export function Add() {
-    const { openAdd, setOpenAdd } = useApp()
+    const { openAdd, setOpenAdd } = useTools()
     const { addTodo } = useFirebase()
 
     const [priority, setPriority] = useState('0')

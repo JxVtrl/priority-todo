@@ -5,10 +5,18 @@ import React, {
     useState,
     useRef,
 } from 'react'
+import { useBoolean } from '@chakra-ui/react'
 
 const ToolsContext = createContext({})
 
 export function ToolsProvider({ children }) {
+    const [darkMode, setDarkMode] = useBoolean()
+    const [openAdd, setOpenAdd] = useBoolean()
+    const [itemEdit, setItemEdit] = useState({})
+    const [editModal, setEditModal] = useState(false)
+    const [itemDelete, setItemDelete] = useState({})
+    const [deleteModal, setDeleteModal] = useState(false)
+
     const formatHours = (hours, minutes) => {
         if (hours < 10)
             if (minutes < 10)
@@ -65,7 +73,19 @@ export function ToolsProvider({ children }) {
         formatDate,
         formatHours,
         formatDateBack,
-        createObject
+        createObject,
+        darkMode,
+        setDarkMode,
+        openAdd,
+        setOpenAdd,
+        setItemEdit,
+        itemEdit,
+        setEditModal,
+        editModal,
+        setItemDelete,
+        itemDelete,
+        deleteModal,
+        setDeleteModal,
 
     }
 

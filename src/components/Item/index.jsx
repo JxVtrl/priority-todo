@@ -9,7 +9,7 @@ import {
   Flex,
   Text,
 } from '@chakra-ui/react';
-import { useApp, useFirebase, useTools } from '../../context';
+import { useTools, useFirebase } from '../../context';
 import { useDevice } from '../../hooks'
 import { Button } from '../'
 
@@ -131,18 +131,15 @@ function ItemDates({ item }) {
 }
 
 function ItemButtons({ item }) {
-  const { itemData } = useApp()
   return (
     <Flex justify='space-between'>
       <Button
         type='delete'
         item={item}
-        itemData={itemData}
       >Delete</Button>
       <Button
         type='edit'
         item={item}
-        itemData={itemData}
       >Edit</Button>
     </Flex>
   )
