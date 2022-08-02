@@ -9,16 +9,27 @@ import React, {
 const ToolsContext = createContext({})
 
 export function ToolsProvider({ children }) {
+    const formatHours = (hours, minutes) => {
+        if (hours < 10)
+            if (minutes < 10)
+                return `0${hours}:0${minutes}`
+            else
+                return `0${hours}:${minutes}`
+        return `${hours}:${minutes}`
+    }
     
-    const formatDate = (date: any) => {
-        if(date < 10) {
-            return `0${date}`
-        } else {
-            return date
+    const formatDate = (day, month, year) => {
+        if (day < 10) {
+            day = '0' + day
         }
+        if (month < 10) {
+            month = '0' + month
+        }
+
+        return `${day}/${month}/${year}`
     }
 
-    const formatDateBack = (date: any, hour: any) => {
+    const formatDateBack = (date, hour) => {
         if(date)
             for (let i = 0; i < date.length; i++) {
                 if (hour && date) {
@@ -32,9 +43,29 @@ export function ToolsProvider({ children }) {
             }
     }
 
+    const createObject = (
+        name,
+        description,
+        priority,
+        date,
+        done = false,
+        id = null,
+    ) => {
+        return {
+            name,
+            description,
+            priority,
+            date,
+            done,
+            id
+        }
+    }
+    
     const value = {
         formatDate,
-        formatDateBack
+        formatHours,
+        formatDateBack,
+        createObject
 
     }
 

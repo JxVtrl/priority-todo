@@ -17,11 +17,11 @@ export function Item({ item, idx }) {
   return (
     <AccordionItem key={idx} >
       <AccordionButton
-        cursor='pointer'
         h='45px'
+        border='none'
+        cursor='pointer'
         padding='0 15px'
         borderRadius='5px'
-        border='none'
       >
         <ItemHeader item={item} ikey={idx} />
       </AccordionButton>
@@ -34,7 +34,7 @@ export function Item({ item, idx }) {
 
 function ItemHeader({ item }) {
   const { updateDone } = useFirebase()
-  const { formatDate } = useTools()
+  const { formatDate, formatHours } = useTools()
   const { device } = useDevice()
 
   return (
@@ -49,22 +49,29 @@ function ItemHeader({ item }) {
             fontWeight={item.done ? '600' : '300'}
           />
           <Text
-            align='left'
-            decoration={item.done ? 'line-through' : 'none'}
-            fontSize='sm'
             w='100%'
+            align='left'
+            fontSize='sm'
             textTransform='capitalize'
+            decoration={item.done ? 'line-through' : 'none'}
           >
             {item.name}
           </Text>
         </Flex>
         <Flex w='100%' gap='10px' align='center' justify='end' m='0 10px'>
           <Text mr='5px' decoration={item.done ? 'line-through' : 'none'}>
-            {new Date(item.date[0]).getHours()}:{new Date(item.date[0]).getMinutes()}
+            {formatHours(
+              new Date(item.date[0]).getHours(),
+              new Date(item.date[0]).getMinutes()
+            )}
             {' '}
             {device.isMobileSM ? <br/> : '-'}
             {' '}
-            {formatDate(new Date(item.date[0]).getDate())}/{formatDate(new Date(item.date[0]).getMonth() + 1)}/{new Date(item.date[0]).getFullYear()}
+            {formatDate(
+              new Date(item.date[0]).getDate(),
+              new Date(item.date[0]).getMonth() + 1,
+              new Date(item.date[0]).getFullYear()
+            )}
           </Text>
           <Box
             w='10px'
@@ -80,16 +87,63 @@ function ItemHeader({ item }) {
 }
 
 function ItemDescription({ item }) {
+  return (
+    <Flex flexDir='column' gap='25px'>
+      <Flex flexDir='column' gap='15px'>
+        <Text textTransform='capitalize'>
+          {item.description}
+        </Text>
+        {item.date.length > 1 && (
+          <ItemDates item={item} />
+        )}
+      </Flex>
+      <ItemButtons item={item} />
+    </Flex>
+  )
+}
+
+function ItemDates({ item }) {
+  const { formatDate, formatHours } = useTools()
+
+  return (
+    <Flex flexDirection='column' textAlign='end'>
+      Next Dates
+      {item.date.map((i, idx) => {
+        if (idx > 0) {
+          return (
+            <Text key={idx - 1} textAlign='end'>
+              {formatHours(
+                new Date(item.date[idx]).getHours(),
+                new Date(item.date[idx]).getMinutes()
+              )}
+              {' - '}
+              {formatDate(
+                new Date(i).getDate(),
+                new Date(i).getMonth() + 1,
+                new Date(i).getFullYear()
+              )}
+            </Text>
+          )
+        }
+      })}
+    </Flex>
+  )
+}
+
+function ItemButtons({ item }) {
   const { itemData } = useApp()
   return (
-    <Flex flexDir='column' gap='15px'>
-      <Text textTransform='capitalize'>
-        {item.description}
-      </Text>
-      <Flex justify='space-between'>
-        <Button type='delete' item={item} itemData={itemData}>Delete</Button>
-        <Button type='edit' item={item} itemData={itemData}>Edit</Button>
-      </Flex>
+    <Flex justify='space-between'>
+      <Button
+        type='delete'
+        item={item}
+        itemData={itemData}
+      >Delete</Button>
+      <Button
+        type='edit'
+        item={item}
+        itemData={itemData}
+      >Edit</Button>
     </Flex>
   )
 }

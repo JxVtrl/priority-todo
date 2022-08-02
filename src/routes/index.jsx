@@ -18,7 +18,10 @@ const RoutesDeclaration = () => {
 
   return (
     <AnimatePresence exitBeforeEnter>
-      <Routes location={location} key={location.pathname}>
+      <Routes
+        location={location}
+        key={location.pathname}
+      >
         <Route
           path={`/`}
           Exact

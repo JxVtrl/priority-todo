@@ -41,7 +41,7 @@ export function AppProvider({ children }) {
                 priority: priority,
                 done: false,
                 date: new Date().toLocaleDateString(),
-                id: itemData.length
+                id: itemData.id
             }
         ])
     }

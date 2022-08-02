@@ -7,7 +7,7 @@ import { Add, Delete, Edit, Item } from '../../components'
 import { useFirebase } from '../../context';
 
 export function Home() {
-  const { todos } = useFirebase()
+  const { todos, load } = useFirebase()
 
   return (
     <Flex
@@ -21,9 +21,11 @@ export function Home() {
       gap='12px'
       position='relative'
     >
-      <Accordion allowToggle display='flex' flexDir='column'>
-        {todos.map((item, idx) => <Item key={idx} item={item} idx={idx} />)}
-      </Accordion>
+      {load || (
+        <Accordion allowToggle display='flex' flexDir='column'>
+          {todos.map((item, idx) => <Item key={idx} item={item} idx={idx} />)}
+        </Accordion>
+      )}
       <Add />
       <Edit />
       <Delete />

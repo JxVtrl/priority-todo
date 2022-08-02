@@ -72,7 +72,6 @@ export function Edit() {
 
 function EditBody({ editObj, setEditObj }) {
   const { itemEdit } = useApp()
-  console.log(editObj)
 
   return (
     <ModalBody gap='15px' display='flex' flexDir='column' pos='relative'>
