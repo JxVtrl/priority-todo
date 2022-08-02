@@ -15,47 +15,34 @@ import {
   Stack,
   Input,
   Text,
+  Flex,
+  Textarea
 } from '@chakra-ui/react'
+import { AddIcon, DeleteIcon } from '@chakra-ui/icons'
 import { useApp, useFirebase, useTools } from '../../context'
 
 export function Edit() {
-  const { itemEdit, editModal, setEditModal, setItemEdit } = useApp()
-  const { formatDateBack } = useTools()
-  const { updateTodo } = useFirebase()
+  const { itemEdit, editModal, setEditModal, setItemEdit } = useApp() 
 
-  const [newName, setNewName] = useState('')
-  const [newDescription, setNewDescription] = useState('')
-  const [newPriority, setNewPriority] = useState(itemEdit.priority)
-  const [newDate, setNewDate] = useState('00-00-0000')
-  const [newHour, setNewHour] = useState('00:00')
+  const [newObj, setNewObj] = useState({
+    name: itemEdit.name,
+    description: itemEdit.description,
+    priority: itemEdit.priority,
+    date: itemEdit.date
+  })
 
   useEffect(() => {
-    setNewName(itemEdit.name)
-    setNewDescription(itemEdit.description)
-    setNewPriority(itemEdit.priority)
-    setNewDate(itemEdit.date?.replaceAll('/', '-'))
-    setNewHour(itemEdit.hour)
+    setNewObj({
+      name: itemEdit.name,
+      description: itemEdit.description,
+      priority: itemEdit.priority,
+      date: itemEdit.date
+    })
   }, [itemEdit])
 
   const handleClose = () => {
     setEditModal(false)
     setItemEdit({})
-  }
-
-  const handleSubmit = () => {
-    if (newName && newDate && newHour) {
-      updateTodo({
-        id: itemEdit.id,
-        name: newName,
-        description: newDescription,
-        priority: newPriority,
-        date: newDate,
-        hour: newHour,
-        done: itemEdit.done,
-      })
-    }
-    setItemEdit({})
-    setEditModal(false)
   }
 
   return (
@@ -65,63 +52,154 @@ export function Edit() {
           bg='blackAlpha.300'
           backdropFilter='blur(10px) hue-rotate(90deg)'
         />
-        <ModalContent>
-          <ModalHeader>
-            <Text>
-              Edit item
-            </Text>
-          </ModalHeader>
+        <ModalContent w='92%'>
+          <EditHeader />
           <ModalCloseButton />
-          <ModalBody gap='15px' display='flex' flexDir='column'>
-            <FormControl gap='5px'>
-              <FormLabel>
-                  <Text>Title</Text>
-              </FormLabel>
-              <Input w='80%' placeholder='Title' value={newName} onChange={e=>setNewName(e.target.value)} />
-            </FormControl>
+          <EditBody
+            editObj={newObj}
+            setEditObj={setNewObj}
+          />
+          <EditFooter
+            close={handleClose}
+            editObj={newObj}
+          />
+        </ModalContent>
+      </Modal>
+    </>
+  )
+}
 
 
-            <FormControl gap='5px'>
-              <FormLabel>
-                  <Text>Description</Text>
-              </FormLabel>
-              <Input w='80%' placeholder='Description' value={newDescription} onChange={e => setNewDescription(e.target.value)} />
-            </FormControl>
+function EditBody({ editObj, setEditObj }) {
+  const { itemEdit } = useApp()
+  console.log(editObj)
 
-            <FormControl>
-              <FormLabel>
-                  <Text>Priority</Text>
-              </FormLabel>
-              <RadioGroup onChange={setNewPriority} value={newPriority}>
-                  <Stack spacing={5} direction='row'>
-                      <Radio colorScheme='green' value='0'>Easy</Radio>
-                      <Radio colorScheme='yellow' value='1'>Medium</Radio>
-                      <Radio colorScheme='red' value='2'>Hard</Radio>      
-                  </Stack>
-              </RadioGroup> 
-            </FormControl>
+  return (
+    <ModalBody gap='15px' display='flex' flexDir='column' pos='relative'>
+      {/* Title */}
+      <FormControl gap='5px'>
+        <FormLabel>
+            <Text>Title</Text>
+        </FormLabel>
+        <Textarea
+          placeholder='Title'
+          value={editObj.name}
+          onChange={e => setEditObj({ ...editObj, name: e.target.value })}
+        />
+      </FormControl>
 
-            <FormControl gap='5px'>
-              <FormLabel>
-                  <Text>Date</Text>
-              </FormLabel>
+
+      {/* Description */}
+      <FormControl gap='5px'>
+        <FormLabel>
+            <Text>Description</Text>
+        </FormLabel>
+        <Textarea
+          placeholder='Description'
+          value={editObj.description}
+          onChange={e => setEditObj({ ...editObj, description: e.target.value })}
+        />
+      </FormControl>
+
+      
+      {/* Priority */}
+      <FormControl>
+        <FormLabel>
+            <Text>Priority</Text>
+        </FormLabel>
+        <RadioGroup onChange={e => { setEditObj({ ...editObj, priority: e })}} value={editObj.priority}>
+            <Stack spacing={5} direction='row'>
+                <Radio colorScheme='green' value='0'>Easy</Radio>
+                <Radio colorScheme='yellow' value='1'>Medium</Radio>
+                <Radio colorScheme='red' value='2'>Hard</Radio>      
+            </Stack>
+        </RadioGroup> 
+      </FormControl>
+
+      
+      {/* Date */}
+      <FormControl gap='5px' id='date_input_add'>
+        <FormLabel>
+          <Flex justify='space-between' align='center'>
+            <Text>Date</Text>
+            <AddIcon onClick={() => {
+              setEditObj({ ...editObj, date: [...editObj.date, ''] })
+            }} cursor='pointer' w='15px' h='100%' color={'black'} />
+          </Flex>
+        </FormLabel>
+        <Flex
+          gap='10px'
+          flexDir='column'
+          >
+          {editObj.date?.map((date, idx) => (
+            <Flex align='center' gap='10px' key={idx}>
               <Input
+                w='90%'
                 placeholder="Select Date and Time"
                 size="md"
                 type="datetime-local"
-                value={formatDateBack(newDate, newHour)}
-                onChange={e => { setNewDate(e.target.value.split('T')[0]); setNewHour(e.target.value.split('T')[1]) }}
+                value={date}
+                onChange={e => {
+                  const newDate = [...editObj.date]
+                  newDate[idx] = e.target.value
+                  setEditObj({ ...editObj, date: newDate })
+                }}
               />
-            </FormControl>
-            </ModalBody>
-            <ModalFooter>
-                <Button colorScheme='blue' mr={3} onClick={handleClose}>
-                Cancel
-                </Button>
-                <Button onClick={handleSubmit} variant='ghost'>Save</Button>
-            </ModalFooter>
-        </ModalContent>
-      </Modal>
+              {idx === 0 || (
+                <DeleteIcon
+                  cursor='pointer'
+                  onClick={() => {
+                    const newDate = [...editObj.date]
+                    newDate.splice(idx, 1)
+                    setEditObj({ ...editObj, date: newDate })
+                  }}
+                />
+              )}
+            </Flex>
+          ))}
+        </Flex>
+      </FormControl>
+    </ModalBody>
+  )
+}
+
+function EditFooter({ close, editObj }) {
+  const { itemEdit, setEditModal, setItemEdit } = useApp()
+  const { updateTodo } = useFirebase()
+
+  const handleSubmit = () => {
+    if (editObj.name && editObj.date) {
+      updateTodo({
+        id: itemEdit.id,
+        done: itemEdit.done,
+        name: editObj.name,
+        date: editObj.date,
+        priority: editObj.priority,
+        description: editObj.description,
+      })
+    }
+    setItemEdit({})
+    setEditModal(false)
+  }
+  
+  return (
+    <ModalFooter>
+      <Button colorScheme='blue' mr={3} onClick={() => close()}>
+        Cancel
+      </Button>
+      <Button onClick={handleSubmit} variant='ghost'>Save</Button>
+    </ModalFooter>
+  )
+}
+
+function EditHeader() {
+  return (
+    <>
+      <ModalHeader>
+        <Text>
+          Edit item
+        </Text>
+      </ModalHeader>
     </>
   )
 }

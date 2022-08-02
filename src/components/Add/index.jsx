@@ -19,6 +19,8 @@ import {
     FormLabel,
 } from '@chakra-ui/react'
 
+import { AddIcon, DeleteIcon } from '@chakra-ui/icons'
+
 import { useApp, useFirebase } from '../../context';
 
 export function Add() {
@@ -28,8 +30,7 @@ export function Add() {
     const [priority, setPriority] = useState('0')
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState('')
-    const [date, setDate] = useState(new Date());
-    const [hour, setHour] = useState(new Date().getHours());
+    const [date, setDate] = useState([new Date()]);
 
     const handleClose = () => {
         setOpenAdd.off()
@@ -40,13 +41,12 @@ export function Add() {
         setPriority(0)
         setTitle('')
         setDescription('')
-        setDate(new Date())
-        setHour(new Date().getHours())
+        setDate([new Date()])
     }
 
     const saveData = () => {
-        if (title && date && hour) {
-            addTodo(title, description, priority, date, hour)
+        if (title && date) {
+            addTodo(title, description, priority, date)
             resetStates()
             setOpenAdd.off()
         }
@@ -81,6 +81,7 @@ export function Add() {
                         flexDir='column'
                         margin='0 auto'
                         gap='25px'
+                        position='relative'
                     >
                         {/* Title */}
                         <FormControl gap='5px'>
@@ -130,18 +131,44 @@ export function Add() {
                         {/* Date */}
                         <FormControl>
                             <FormLabel>
-                                <Text>Date</Text>
+                                <Flex justify='space-between' align='center'>
+                                    <Text>Date</Text>
+                                    <AddIcon onClick={() => setDate([...date, new Date()])} cursor='pointer' w='15px' h='100%' color={'black'} />
+                                </Flex>
                             </FormLabel>
-                            <Flex w='100%'>
-                                <Input
-                                    placeholder="Select Date and Time"
-                                    size="md"
-                                    type="datetime-local"
-                                    onChange={e => {
-                                        setDate(e.target.value.split('T')[0])
-                                        setHour(e.target.value.split('T')[1])
-                                    }}
-                                />
+                            <Flex w='100%' flexDir='column' gap='10px'>
+                                {date?.map((item, idx) => (
+                                    <Flex
+                                        key={idx}
+                                        justify='space-between'
+                                        align='center'
+                                        gap='10px'
+                                    >
+                                        <Input
+                                            placeholder="Select Date and Time"
+                                            size="md"
+                                            type="datetime-local"
+                                            onChange={e => {
+                                                const newDate = [...date]
+                                                newDate[idx] = e.target.value
+                                                setDate(newDate)
+                                            }}
+                                        />
+                                        {idx === 0 || (
+                                            <DeleteIcon
+                                                position='absolute'
+                                                right='-40px'
+                                                cursor='pointer'
+                                                onClick={() => {
+                                                    const newDate = [...date]
+                                                    newDate.splice(idx, 1)
+                                                    setDate(newDate)
+                                                }}
+                                            />
+                                        )}
+                                    </Flex>
+
+                                ))}
                             </Flex>
                         </FormControl>
                     </ModalBody>

@@ -58,11 +58,11 @@ function ItemHeader({ item }) {
         </Flex>
         <Flex w='100%' gap='10px' align='center' justify='end' m='0 10px'>
           <Text mr='5px' decoration={item.done ? 'line-through' : 'none'}>
-            {item.hour}
+            {new Date(item.date[0]).getHours()}:{new Date(item.date[0]).getMinutes()}
             {' '}
             -
             {' '}
-            {formatDate(item.date)}
+            {formatDate(new Date(item.date[0]).getDate())}/{formatDate(new Date(item.date[0]).getMonth() + 1)}/{new Date(item.date[0]).getFullYear()}
           </Text>
           <Box
             w='10px'

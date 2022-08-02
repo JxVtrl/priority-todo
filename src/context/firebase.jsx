@@ -11,7 +11,6 @@ import { useTools } from './tools'
 const FirebaseContext = createContext()
 
 export function FirebaseProvider({ children }) {
-    const { formatDate } = useTools()
     const [users, setUsers] = useState([])
     const [todos, setTodos] = useState([])
 
@@ -34,13 +33,12 @@ export function FirebaseProvider({ children }) {
         getTodos()
     }, [])
 
-    const addTodo = async (name, description, priority, date, hour) => {
+    const addTodo = async (name, description, priority, date) => {
         const todo = {
             name,
             description,
             priority,
-            date: formatDate(date),
-            hour,
+            date: date,
             done: false,
         }
         await addDoc(todosCollection, todo)
@@ -53,7 +51,6 @@ export function FirebaseProvider({ children }) {
             description: item.description,
             priority: item.priority,
             date: item.date,
-            hour: item.hour,
             done: item.done,
             id: item.id,
         }
@@ -62,15 +59,16 @@ export function FirebaseProvider({ children }) {
     }
 
     const updateDone = async (item) => {
+        console.log(item)
         const todo = {
             name: item.name,
             description: item.description,
             priority: item.priority,
             date: item.date,
-            hour: item.hour,
             id: item.id,
             done: !item.done,
         }
+        console.log(todo)
         await updateDoc(doc(todosCollection, item.id), todo)
         getTodos()
     }
