@@ -33,43 +33,28 @@ export function FirebaseProvider({ children }) {
         getTodos()
     }, [])
 
-    const addTodo = async (name, description, priority, date) => {
-        const todo = {
+    const createObject = (name, description, priority, date, done=false, id=null) =>{
+        return {
             name,
             description,
             priority,
-            date: date,
-            done: false,
+            date,
+            done,
+            id
         }
-        await addDoc(todosCollection, todo)
+    }
+
+    const addTodo = async (name, description, priority, date) => {
+        await addDoc(todosCollection, createObject(name, description, priority, date))
         getTodos()
     }
 
-    const updateTodo = async (item) => {
-        const todo = {
-            name: item.name,
-            description: item.description,
-            priority: item.priority,
-            date: item.date,
-            done: item.done,
-            id: item.id,
-        }
-        await updateDoc(doc(todosCollection, item.id), todo)
-        getTodos()
-    }
-
-    const updateDone = async (item) => {
-        console.log(item)
-        const todo = {
-            name: item.name,
-            description: item.description,
-            priority: item.priority,
-            date: item.date,
-            id: item.id,
-            done: !item.done,
-        }
-        console.log(todo)
-        await updateDoc(doc(todosCollection, item.id), todo)
+    const editTodo = async (item) => {
+        await
+            updateDoc(
+                doc(todosCollection, item.id),
+                createObject(item.name, item.description, item.priority, item.date, item.done, item.id)
+            )
         getTodos()
     }
 
@@ -78,13 +63,21 @@ export function FirebaseProvider({ children }) {
         await deleteDoc(doc(db, "to-do", item.id));
     }
 
+    const updateDone = async (item) => {
+        await
+            updateDoc(
+                doc(todosCollection, item.id),
+                createObject(item.name, item.description, item.priority, item.date, !item.done, item.id)
+            )
+        getTodos()
+    }
 
 
     const value = {
         todos,
         addTodo,
         deleteTodo,
-        updateTodo,
+        editTodo,
         updateDone
 
     }

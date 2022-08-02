@@ -165,11 +165,11 @@ function EditBody({ editObj, setEditObj }) {
 
 function EditFooter({ close, editObj }) {
   const { itemEdit, setEditModal, setItemEdit } = useApp()
-  const { updateTodo } = useFirebase()
+  const { editTodo } = useFirebase()
 
   const handleSubmit = () => {
     if (editObj.name && editObj.date) {
-      updateTodo({
+      editTodo({
         id: itemEdit.id,
         done: itemEdit.done,
         name: editObj.name,

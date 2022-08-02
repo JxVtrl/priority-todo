@@ -10,6 +10,7 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { useApp, useFirebase, useTools } from '../../context';
+import { useDevice } from '../../hooks'
 import { Button } from '../'
 
 export function Item({ item, idx }) {
@@ -34,6 +35,7 @@ export function Item({ item, idx }) {
 function ItemHeader({ item }) {
   const { updateDone } = useFirebase()
   const { formatDate } = useTools()
+  const { device } = useDevice()
 
   return (
     <>
@@ -60,7 +62,7 @@ function ItemHeader({ item }) {
           <Text mr='5px' decoration={item.done ? 'line-through' : 'none'}>
             {new Date(item.date[0]).getHours()}:{new Date(item.date[0]).getMinutes()}
             {' '}
-            -
+            {device.isMobileSM ? <br/> : '-'}
             {' '}
             {formatDate(new Date(item.date[0]).getDate())}/{formatDate(new Date(item.date[0]).getMonth() + 1)}/{new Date(item.date[0]).getFullYear()}
           </Text>
