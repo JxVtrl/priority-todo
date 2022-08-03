@@ -46,6 +46,10 @@ export function FirebaseProvider({ children }) {
         setTodos(data.docs.map(doc => ({ ...doc.data(), id: doc.id })))
         setLoad.off()
     }
+    
+    useEffect(() => {
+        checkDatesOrder(todos)
+    }, [todos])
 
 
     // POST
@@ -79,6 +83,9 @@ export function FirebaseProvider({ children }) {
         await deleteDoc(doc(db, "to-do", item.id));
     }
 
+    const checkDatesOrder = async () => {
+
+    }
 
 
 

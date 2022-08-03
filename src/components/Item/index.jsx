@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   AccordionItem,
   AccordionButton,
@@ -8,6 +8,8 @@ import {
   Box,
   Flex,
   Text,
+  ScaleFade,
+  useTimeout,
 } from '@chakra-ui/react';
 import { useTools, useFirebase } from '../../context';
 import { useDevice } from '../../hooks'
@@ -57,11 +59,8 @@ function ItemHeader({ item }) {
             {item.name}
           </Text>
         </Flex>
-        <Flex w='100%' gap='10px' align='center' justify='end' m='0 10px'>
-          <Text mr='5px' decoration={item.done ? 'line-through' : 'none'}>
-            <ItemHeaderDate date={item.date[0]} />
-            
-          </Text>
+        <Flex w='100%' h='100%' gap='10px' align='center' justify='end' m='0 10px' pos='relative'>
+          <ItemHeaderDate date={item.date[0]} item={item} />
           <Box
             w='10px'
             h='10px'
@@ -134,35 +133,38 @@ function ItemButtons({ item }) {
   )
 }
 
-function ItemHeaderDate({ date }) {
+function ItemHeaderDate({ date, item }) {
   const { formatDate, formatHours } = useTools()
   const { device: { isMobileSM } } = useDevice()
 
-  const [showType, setShowType] = useState(0)
+  const [showType, setShowType] = useState(false)
 
   const oneDay = 24 * 60 * 60 * 1000;
   
   const calculateLeft = () => {
     return (Math.round(Math.abs((new Date() - new Date(date))) / oneDay))
   }
-
-  
-  const handleChangeType = () => {
-    switch (showType) {
-      case 1:
-        return setShowType(0)
-      default: 
-        return setShowType(showType + 1)
-    }
-  }
     
-  const typeInterval = setInterval(handleChangeType, 5000)
-  
+  setInterval(() => {
+    setShowType(!showType)
+  }, 3000)
 
   return (
-    <>
-      {showType === 0 ? (
-        <>
+    <Flex h='100%'>
+      <ScaleFade
+        in={showType == true}
+        unmountOnExit
+        initialScale={0.3}
+        style={
+          {
+            position: 'absolute',
+            inset: 0,
+            margin: '0 auto',
+            top: '-18px'
+          }
+        }
+      >
+        <Text mr='5px' decoration={item.done ? 'line-through' : 'none'}>
           {formatHours(
             new Date(date).getHours(),
             new Date(date).getMinutes()
@@ -175,19 +177,31 @@ function ItemHeaderDate({ date }) {
             new Date(date).getMonth() + 1,
             new Date(date).getFullYear()
           )}          
-        </>
-        ) :
-        showType == 1 && (
-          <>
-            {
-              calculateLeft(showType) !== 1 ?
-                `${calculateLeft(showType)} days remaining`
-                :
-                `${calculateLeft(showType)} day remaining`
-            }
-          </>
-        )
-      }
-    </>
+        </Text>
+      </ScaleFade>
+      <ScaleFade
+        in={showType == false}
+        unmountOnExit
+        initialScale={0.3}
+        style={
+          {
+            position: 'absolute',
+            inset: 0,
+            margin: '0 auto',
+            top: '-7px',
+            right: '8px'
+          }
+        }
+      >
+        <Text mr='5px' decoration={item.done ? 'line-through' : 'none'}>
+          {
+            calculateLeft(showType) !== 1 ?
+              `${calculateLeft(showType)} days remaining`
+              :
+              `${calculateLeft(showType)} day remaining`
+          }
+        </Text>
+      </ScaleFade>
+    </Flex>
   )
 }
