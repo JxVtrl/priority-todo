@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
   AccordionItem,
   AccordionButton,
@@ -17,7 +17,7 @@ export function Item({ item, idx }) {
   return (
     <AccordionItem key={idx} >
       <AccordionButton
-        h='45px'
+        h='55px'
         border='none'
         cursor='pointer'
         padding='0 15px'
@@ -34,8 +34,7 @@ export function Item({ item, idx }) {
 
 function ItemHeader({ item }) {
   const { updateDone } = useFirebase()
-  const { formatDate, formatHours } = useTools()
-  const { device } = useDevice()
+
 
   return (
     <>
@@ -60,18 +59,8 @@ function ItemHeader({ item }) {
         </Flex>
         <Flex w='100%' gap='10px' align='center' justify='end' m='0 10px'>
           <Text mr='5px' decoration={item.done ? 'line-through' : 'none'}>
-            {formatHours(
-              new Date(item.date[0]).getHours(),
-              new Date(item.date[0]).getMinutes()
-            )}
-            {' '}
-            {device.isMobileSM ? <br/> : '-'}
-            {' '}
-            {formatDate(
-              new Date(item.date[0]).getDate(),
-              new Date(item.date[0]).getMonth() + 1,
-              new Date(item.date[0]).getFullYear()
-            )}
+            <ItemHeaderDate date={item.date[0]} />
+            
           </Text>
           <Box
             w='10px'
@@ -142,5 +131,63 @@ function ItemButtons({ item }) {
         item={item}
       >Edit</Button>
     </Flex>
+  )
+}
+
+function ItemHeaderDate({ date }) {
+  const { formatDate, formatHours } = useTools()
+  const { device: { isMobileSM } } = useDevice()
+
+  const [showType, setShowType] = useState(0)
+
+  const oneDay = 24 * 60 * 60 * 1000;
+  
+  const calculateLeft = () => {
+    return (Math.round(Math.abs((new Date() - new Date(date))) / oneDay))
+  }
+
+  
+  const handleChangeType = () => {
+    switch (showType) {
+      case 1:
+        return setShowType(0)
+      default: 
+        return setShowType(showType + 1)
+    }
+  }
+    
+  const typeInterval = setInterval(handleChangeType, 5000)
+  
+
+  return (
+    <>
+      {showType === 0 ? (
+        <>
+          {formatHours(
+            new Date(date).getHours(),
+            new Date(date).getMinutes()
+          )}
+          {' '}
+          {isMobileSM ? <br/> : '-'}
+          {' '}
+          {formatDate(
+            new Date(date).getDate(),
+            new Date(date).getMonth() + 1,
+            new Date(date).getFullYear()
+          )}          
+        </>
+        ) :
+        showType == 1 && (
+          <>
+            {
+              calculateLeft(showType) !== 1 ?
+                `${calculateLeft(showType)} days remaining`
+                :
+                `${calculateLeft(showType)} day remaining`
+            }
+          </>
+        )
+      }
+    </>
   )
 }
