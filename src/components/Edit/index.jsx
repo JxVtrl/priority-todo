@@ -144,7 +144,7 @@ function EditBody({ editObj, setEditObj }) {
                   setEditObj({ ...editObj, date: newDate })
                 }}
               />
-              {idx === 0 || (
+              {editObj.date.length > 1 && (
                 <DeleteIcon
                   cursor='pointer'
                   onClick={() => {
