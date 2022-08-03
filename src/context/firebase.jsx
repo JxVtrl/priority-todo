@@ -43,14 +43,30 @@ export function FirebaseProvider({ children }) {
     const getTodos = async () => {
         setLoad.on()
         const data = await getDocs(todosCollection)
+
         setTodos(data.docs.map(doc => ({ ...doc.data(), id: doc.id })))
+
+        // Ordenar datas
+        data.docs.map(doc => {
+            const dates = doc.data().date
+            console.log(dates)
+            dates.sort((a, b) => {
+                return new Date(a) - new Date(b)
+            })
+            
+            setTodos(prev => {
+                return prev.map(todo => {
+                    if (todo.id === doc.id) {
+                        return { ...todo, date: dates }
+                    }
+                    return todo
+                }
+                )
+            })
+        })
+
         setLoad.off()
     }
-    
-    useEffect(() => {
-        checkDatesOrder(todos)
-    }, [todos])
-
 
     // POST
     const addTodo = async (name, description, priority, date) => {
@@ -82,15 +98,6 @@ export function FirebaseProvider({ children }) {
         setTodos(todos.filter(todo => todo.id !== item.id))
         await deleteDoc(doc(db, "to-do", item.id));
     }
-
-    const checkDatesOrder = async () => {
-
-    }
-
-
-
-
-
 
 
     const value = {
