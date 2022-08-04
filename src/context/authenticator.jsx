@@ -17,17 +17,16 @@ const AuthGoogleContext = createContext()
 
 export const AuthGoogleProvider = ({ children }) => {
     const auth = getAuth(app);
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useState({});
 
     useEffect(() => {
-        const loadUser = () => {
-            const sessionToken = sessionStorage.getItem("@AuthFirebase:token");
-            const sessionUser = sessionStorage.getItem("@AuthFirebase:user");
+        const sessionToken = sessionStorage.getItem("@AuthFirebase:token");
+        const sessionUser = sessionStorage.getItem("@AuthFirebase:user");
 
-            if (sessionToken && sessionUser) {
-                setUser(JSON.parse(sessionUser));
-            }
+        if (sessionToken && sessionUser) {
+            setUser(JSON.parse(sessionUser));
         }
+        
     }, [])
 
 
@@ -36,16 +35,16 @@ export const AuthGoogleProvider = ({ children }) => {
         sessionStorage.setItem('@AuthFirebase:user', JSON.stringify(user));
     }
 
-    const signInGoogle = () => {
-        signInWithPopup(auth, provider)
+    const signInGoogle = async () => {
+        await signInWithPopup(auth, provider)
             .then((result) => {
                 const credential = GoogleAuthProvider.credentialFromResult(result);
-
                 const token = credential.accessToken;
                 const user = result.user;
-                
+
                 setUser(user);
                 setInSessionStorage(user, token);
+                location.reload();
             }).catch((error) => {
                 const errorCode = error.code;
                 const errorMessage = error.message;
@@ -56,7 +55,8 @@ export const AuthGoogleProvider = ({ children }) => {
 
     const value = {
         signInGoogle,
-        signed: !!user,
+        signed: !!user.uid,
+        user: user,
     }
 
     return (

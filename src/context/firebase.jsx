@@ -49,7 +49,6 @@ export function FirebaseProvider({ children }) {
         // Ordenar datas
         data.docs.map(doc => {
             const dates = doc.data().date
-            console.log(dates)
             dates.sort((a, b) => {
                 return new Date(a) - new Date(b)
             })

@@ -46,26 +46,24 @@ export function Edit() {
   }
 
   return (
-    <>
-      <Modal isOpen={editModal} onClose={handleClose}>
-        <ModalOverlay
-          bg='blackAlpha.300'
-          backdropFilter='blur(10px) hue-rotate(90deg)'
-        />
-        <ModalContent w='92%'>
-          <EditHeader />
-          <ModalCloseButton />
-          <EditBody
-            editObj={newObj}
-            setEditObj={setNewObj}
-          />
-          <EditFooter
-            close={handleClose}
-            editObj={newObj}
-          />
-        </ModalContent>
-      </Modal>
-    </>
+  <Modal isOpen={editModal} onClose={handleClose}>
+    <ModalOverlay
+      bg='blackAlpha.300'
+      backdropFilter='blur(10px) hue-rotate(90deg)'
+    />
+    <ModalContent w='92%'>
+      <EditHeader />
+      <ModalCloseButton />
+      <EditBody
+        editObj={newObj}
+        setEditObj={setNewObj}
+      />
+      <EditFooter
+        close={handleClose}
+        editObj={newObj}
+      />
+    </ModalContent>
+  </Modal>
   )
 }
 
@@ -193,12 +191,10 @@ function EditFooter({ close, editObj }) {
 
 function EditHeader() {
   return (
-    <>
-      <ModalHeader>
-        <Text>
-          Edit item
-        </Text>
-      </ModalHeader>
-    </>
+    <ModalHeader>
+      <Text>
+        Edit item
+      </Text>
+    </ModalHeader>
   )
 }

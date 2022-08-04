@@ -1,13 +1,38 @@
-import React from 'react';
-import { Outlet, Navigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Outlet, Navigate, useNavigate } from 'react-router-dom';
 import { useGoogleAuth } from '../../context';
 // import { Container } from './styles';
 
 export function PrivateRoute({ children }) {
-    const { signed } = useGoogleAuth()
+    const [user, setUser] = useState({});
+    const { signed } = useGoogleAuth();
+
+    useEffect(() => {
+        if(sessionStorage.getItem('@AuthFirebase:user'))
+            setUser(JSON.parse(sessionStorage.getItem('@AuthFirebase:user')))
+    }, [])
+
     return (
         <>
-            {signed ? <Outlet /> : <Navigate to='/login' />}
-        </>    
-    );
+            {user?.uid && signed ? children : <Navigate to="/login" replace={true} />}
+        </>
+    )
+
+
+}
+
+export function PrivateLoginRoute({ children }) {
+    const [user, setUser] = useState({});
+    const { signed } = useGoogleAuth();
+
+    useEffect(() => {
+        if(sessionStorage.getItem('@AuthFirebase:user'))
+            setUser(JSON.parse(sessionStorage.getItem('@AuthFirebase:user')))
+    } , [])
+
+    return (
+        <>
+            {user?.uid? <Navigate to="/" replace={true} /> : children}
+        </>
+    )
 }

@@ -3,7 +3,7 @@ import { AnimatePresence } from 'framer-motion'
 import { Spinner, Center } from '@chakra-ui/react'
 import { GlobalLayout, LoginLayout } from '../layout'
 import { Home, Login } from '../pages'
-import { PrivateRoute } from './Private'
+import { PrivateRoute, PrivateLoginRoute } from './Private'
 
 import {
   BrowserRouter,
@@ -26,20 +26,22 @@ const RoutesDeclaration = () => {
           path={`/`}
           Exact
           element={
-            // <PrivateRoute>
+            <PrivateRoute>
               <GlobalLayout>
                 <Home />
               </GlobalLayout>
-            // </PrivateRoute>
+            </PrivateRoute>
           }
         />
         <Route
           path={`/login`}
           Exact
           element={
-            <LoginLayout>
-              <Login />
-            </LoginLayout>
+            <PrivateLoginRoute>
+              <LoginLayout>
+                <Login />
+              </LoginLayout>
+            </PrivateLoginRoute>
           }
         />
         <Route
