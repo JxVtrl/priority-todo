@@ -54,15 +54,13 @@ const RoutesDeclaration = () => {
 }
 
 export const AppRoutes = () => (
-  <BrowserRouter>
-    <Suspense
-      fallback={
-        <Center height="100%">
-          <Spinner h={20} w={20} />
-        </Center>  
-      }
-    >
-      <RoutesDeclaration />
-    </Suspense>
-  </BrowserRouter>
+  <Suspense
+    fallback={
+      <Center height="100%">
+        <Spinner h={20} w={20} />
+      </Center>  
+    }
+  >
+    <RoutesDeclaration />
+  </Suspense>
 )

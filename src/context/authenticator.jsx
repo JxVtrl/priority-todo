@@ -10,6 +10,7 @@ import {
   GoogleAuthProvider
 } from "firebase/auth";
 import { app } from '../services/firebaseConfig'
+import { useNavigate } from "react-router-dom";
 
 const provider = new GoogleAuthProvider();
 
@@ -18,6 +19,7 @@ const AuthGoogleContext = createContext()
 export const AuthGoogleProvider = ({ children }) => {
     const auth = getAuth(app);
     const [user, setUser] = useState({});
+    const navigate = useNavigate()
 
     useEffect(() => {
         const sessionToken = sessionStorage.getItem("@AuthFirebase:token");
@@ -28,6 +30,12 @@ export const AuthGoogleProvider = ({ children }) => {
         }
         
     }, [])
+
+    useEffect(() => {
+        if (user.uid) {
+            navigate("/")
+        }
+    } , [user])
 
 
     const setInSessionStorage = (user, token) => {
@@ -44,7 +52,6 @@ export const AuthGoogleProvider = ({ children }) => {
 
                 setUser(user);
                 setInSessionStorage(user, token);
-                location.reload();
             }).catch((error) => {
                 const errorCode = error.code;
                 const errorMessage = error.message;
