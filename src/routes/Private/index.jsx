@@ -14,7 +14,7 @@ export function PrivateRoute({ children }) {
 
     return (
         <>
-            {signed ? children : <Navigate to="/login" replace={true} />}
+            {signed ? children : <Navigate to="/login" replace />}
         </>
     )
 
