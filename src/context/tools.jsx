@@ -59,6 +59,7 @@ export function ToolsProvider({ children }) {
         description,
         priority,
         date,
+        badge = null,
         done = false,
         id = null,
     ) => {
@@ -68,7 +69,8 @@ export function ToolsProvider({ children }) {
             priority,
             date,
             done,
-            id
+            id,
+            badge,
         }
     }
 

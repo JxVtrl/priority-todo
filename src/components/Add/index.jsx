@@ -7,6 +7,7 @@ import {
     Radio,
     RadioGroup,
     Stack,
+    Badge,
 
     Modal,
     ModalContent,
@@ -14,7 +15,6 @@ import {
     ModalBody,
     ModalFooter,
     ModalOverlay,
-
     FormControl,
     FormLabel,
 } from '@chakra-ui/react'
@@ -31,6 +31,14 @@ export function Add() {
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState('')
     const [date, setDate] = useState([new Date()]);
+    const [badges, setBadges] = useState(
+        [
+            { text: 'Teste', color: 'gray.500', selected: false },
+            { text: 'Teste', color: 'gray.500', selected: false },
+            { text: 'Teste', color: 'gray.500', selected: false },
+            { text: 'Teste', color: 'gray.500', selected: false },
+        ]
+    )
 
     const handleClose = () => {
         setOpenAdd.off()
@@ -46,7 +54,7 @@ export function Add() {
 
     const saveData = () => {
         if (title && date) {
-            addTodo(title, description, priority, date)
+            addTodo(title, description, priority, date, badges)
             resetStates()
             setOpenAdd.off()
         }
@@ -83,6 +91,32 @@ export function Add() {
                         gap='25px'
                         position='relative'
                     >
+                        {/* Badges */}
+                        <FormControl>
+                            <Flex gap='10px' justify='center'>
+                                {badges.map((item, idx) => (
+                                    <Badge
+                                        key={idx}
+                                        bgColor={item.color}
+                                        w='fit-content'
+                                        variant='subtle'
+                                        onClick={() => {
+                                            const newBadges = [...badges]
+                                            newBadges[idx].selected = !newBadges[idx].selected
+                                            setBadges(newBadges)
+                                        }}
+                                        cursor='pointer'
+                                        style={{
+                                            opacity: item.selected ? 1 : 0.5,
+                                        }}
+                                    >
+                                        {item.text}
+                                    </Badge>
+                                ))}
+                            </Flex>
+                        </FormControl>
+
+
                         {/* Title */}
                         <FormControl gap='5px'>
                             <FormLabel>

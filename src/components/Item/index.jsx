@@ -9,7 +9,8 @@ import {
   Flex,
   Text,
   ScaleFade,
-  useTimeout,
+  Stack,
+  Badge,
 } from '@chakra-ui/react';
 import { useTools, useFirebase } from '../../context';
 import { useDevice } from '../../hooks'
@@ -76,6 +77,12 @@ function ItemDescription({ item }) {
   return (
     <Flex flexDir='column' gap='25px'>
       <Flex flexDir='column' gap='15px'>
+        <Flex gap='8px'  >
+          {item.badge?.map((item, idx) => {
+            if (item.selected)
+              return <Badge key={idx} bgColor={item.color} w='fit-content' variant='subtle'>{item.text}</Badge>
+          })}
+        </Flex>
         <Text textTransform='capitalize'>
           {item.description}
         </Text>

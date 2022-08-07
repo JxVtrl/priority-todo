@@ -16,6 +16,7 @@ import {
   Input,
   Text,
   Flex,
+  Badge,
   Textarea
 } from '@chakra-ui/react'
 import { AddIcon, DeleteIcon } from '@chakra-ui/icons'
@@ -28,7 +29,8 @@ export function Edit() {
     name: itemEdit.name,
     description: itemEdit.description,
     priority: itemEdit.priority,
-    date: itemEdit.date
+    date: itemEdit.date,
+    badges: itemEdit.badge,
   })
 
   useEffect(() => {
@@ -36,7 +38,8 @@ export function Edit() {
       name: itemEdit.name,
       description: itemEdit.description,
       priority: itemEdit.priority,
-      date: itemEdit.date
+      date: itemEdit.date,
+      badges: itemEdit.badge,
     })
   }, [itemEdit])
 
@@ -69,10 +72,43 @@ export function Edit() {
 
 
 function EditBody({ editObj, setEditObj }) {
-  const { itemEdit } = useTools()
-
   return (
     <ModalBody gap='15px' display='flex' flexDir='column' pos='relative'>
+      <FormControl>
+        <FormLabel>
+          <Text>Badges</Text>
+        </FormLabel>
+        <Stack spacing={2}>
+          {editObj.badges && editObj.badges.map((badge, index) => (
+            <Badge
+              key={index}
+              w='fit-content'
+              bgColor={badge.color}
+              onClick={() => {
+                const newBadges = editObj.badges.map((item, idx) => {
+                  if (idx === index) {
+                    return {
+                      ...item,
+                      selected: !item.selected
+                    }
+                  } else {
+                    return item
+                  }
+                })
+                setEditObj({
+                  ...editObj,
+                  badges: newBadges
+                })
+              }}
+                cursor='pointer'
+                userSelect='none'
+              style={{ opacity: editObj.badges[index].selected ? 1 : 0.5 }}
+            >{badge.text}</Badge>
+          ))}
+        </Stack>
+      </FormControl>
+
+
       {/* Title */}
       <FormControl gap='5px'>
         <FormLabel>
@@ -173,6 +209,7 @@ function EditFooter({ close, editObj }) {
         date: editObj.date,
         priority: editObj.priority,
         description: editObj.description,
+        badge: editObj.badges,
       })
     }
     setItemEdit({})

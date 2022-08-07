@@ -67,8 +67,11 @@ export function FirebaseProvider({ children }) {
     }
 
     // POST
-    const addTodo = async (name, description, priority, date) => {
-        await addDoc(todosCollection, createObject(name, description, priority, date))
+    const addTodo = async (name, description, priority, date, badge) => {
+        await addDoc(
+            todosCollection,
+            createObject(name, description, priority, date, badge)
+        )
         getTodos()
     }
 
@@ -77,7 +80,7 @@ export function FirebaseProvider({ children }) {
         await
         updateDoc(
             doc(todosCollection, item.id),
-            createObject(item.name, item.description, item.priority, item.date, item.done, item.id)
+            createObject(item.name, item.description, item.priority, item.date, item.badge, item.done, item.id )
         )
         getTodos()
     }
@@ -87,7 +90,7 @@ export function FirebaseProvider({ children }) {
         await
             updateDoc(
                 doc(todosCollection, item.id),
-                createObject(item.name, item.description, item.priority, item.date, !item.done, item.id)
+                createObject(item.name, item.description, item.priority, item.date, !item.done, item.id, item.badge)
             )
         getTodos()
     }
