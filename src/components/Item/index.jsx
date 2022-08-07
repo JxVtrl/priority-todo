@@ -36,11 +36,9 @@ export function Item({ item, idx }) {
 
 function ItemHeader({ item }) {
   const { updateDone } = useFirebase()
-
-
   return (
     <>
-      <Flex gap='10px' align='center' w='100%'>
+      <Flex gap='10px' align='center' h='100%' w='100%'>
         <Flex align='center' gap='10px' w='100%'>
           <Checkbox
             size='md'
@@ -135,7 +133,7 @@ function ItemButtons({ item }) {
 
 function ItemHeaderDate({ date, item }) {
   const { formatDate, formatHours } = useTools()
-  const { device: { isMobileSM } } = useDevice()
+  const { device: { isMobileSM, isMobileLG } } = useDevice()
 
   const [showType, setShowType] = useState(false)
 
@@ -150,7 +148,7 @@ function ItemHeaderDate({ date, item }) {
   }, 3000)
 
   return (
-    <Flex h='100%'>
+    <Flex>
       <ScaleFade
         in={showType == true}
         unmountOnExit
@@ -159,8 +157,7 @@ function ItemHeaderDate({ date, item }) {
           {
             position: 'absolute',
             inset: 0,
-            margin: '0 auto',
-            top: '-18px'
+            margin: '16px auto',
           }
         }
       >
@@ -187,9 +184,7 @@ function ItemHeaderDate({ date, item }) {
           {
             position: 'absolute',
             inset: 0,
-            margin: '0 auto',
-            top: '-7px',
-            right: '8px'
+            margin: '16px auto',
           }
         }
       >

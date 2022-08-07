@@ -18,12 +18,15 @@ export function ToolsProvider({ children }) {
     const [deleteModal, setDeleteModal] = useState(false)
 
     const formatHours = (hours, minutes) => {
-        if (hours < 10)
-            if (minutes < 10)
-                return `0${hours}:0${minutes}`
-            else
-                return `0${hours}:${minutes}`
-        return `${hours}:${minutes}`
+        if (hours < 10 && minutes < 10) {
+            return `0${hours}:0${minutes}`
+        } else if (hours < 10) {
+            return `0${hours}:${minutes}`
+        } else if (minutes < 10) {
+            return `${hours}:0${minutes}`
+        } else {
+            return `${hours}:${minutes}`
+        }
     }
     
     const formatDate = (day, month, year) => {
@@ -68,6 +71,7 @@ export function ToolsProvider({ children }) {
             id
         }
     }
+
     
     const value = {
         formatDate,

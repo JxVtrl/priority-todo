@@ -7,11 +7,11 @@ import React, {
 } from 'react'
 import { db } from '../services/firebaseConfig'
 import {
+    doc,
     collection,
     getDocs,
     addDoc,
     deleteDoc,
-    doc,
     updateDoc
 } from 'firebase/firestore'
 import { useBoolean } from '@chakra-ui/react'
@@ -27,6 +27,7 @@ export function FirebaseProvider({ children }) {
     // referencia para as duas collections
     const usersCollection = collection(db, 'users')
     const todosCollection = collection(db, 'to-do')
+    // const adminCollection = collection(db, 'admin')
 
     useEffect(() => {
         getUsers()
@@ -45,8 +46,6 @@ export function FirebaseProvider({ children }) {
         const data = await getDocs(todosCollection)
 
         setTodos(data.docs.map(doc => ({ ...doc.data(), id: doc.id })))
-
-        // Ordenar datas
         data.docs.map(doc => {
             const dates = doc.data().date
             dates.sort((a, b) => {
@@ -63,7 +62,7 @@ export function FirebaseProvider({ children }) {
                 )
             })
         })
-
+        
         setLoad.off()
     }
 
@@ -106,6 +105,8 @@ export function FirebaseProvider({ children }) {
         editTodo,
         updateDone,
         load,
+        users,
+        setTodos
     }
 
     return (

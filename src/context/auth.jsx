@@ -5,9 +5,11 @@ import {
     useEffect,
 } from "react";
 import {
-  getAuth,
-  signInWithPopup,
-  GoogleAuthProvider
+    getAuth,
+    signInWithPopup,
+    GoogleAuthProvider,
+    signInWithCustomToken,
+    signInWithCredential
 } from "firebase/auth";
 import { app } from '../services/firebaseConfig'
 import { useNavigate } from "react-router-dom";
@@ -60,8 +62,23 @@ export const AuthGoogleProvider = ({ children }) => {
             });
     }
 
+    const signInUid = async (uid) => {
+        console.log(uid)
+        await signInWithCredential(auth, uid)
+            .then((result) => {
+                const token = result.credential.accessToken;
+                const user = result.user;
+
+                setUser(user);
+                setInSessionStorage(user, token);
+            }).catch((error) => {
+                console.log(error)
+            });
+    }
+
     const value = {
         signInGoogle,
+        signInUid,
         signed: !!user.uid,
         user: user,
     }

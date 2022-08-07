@@ -6,11 +6,11 @@ function App() {
   return (
     <ChakraProvider>
       <ToolsProvider>
-        <FirebaseProvider>
-          <AuthGoogleProvider>
-            <AppRoutes />
-          </AuthGoogleProvider>
-        </FirebaseProvider>
+        <AuthGoogleProvider>
+          <FirebaseProvider>
+              <AppRoutes />
+          </FirebaseProvider>
+        </AuthGoogleProvider>
       </ToolsProvider>
     </ChakraProvider>
   )
