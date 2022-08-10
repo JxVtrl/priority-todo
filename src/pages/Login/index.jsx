@@ -17,12 +17,15 @@ import {
   PinInputField
 } from '@chakra-ui/react'
 import { useFirebase, useGoogleAuth } from '../../context';
+import { joao_pic, marcelo_pic } from '../../assets/img'
 
 export function Login() {
   const { users  } = useFirebase()
   const { signInGoogle, signInUid } = useGoogleAuth()
   const [adminSelected, setAdminSelected] = useState(0)
   const [invalidCode, setInvalidCode] = useState(false)
+  const [validCode, setValidCode] = useState(false)
+
   const [admin, setAdmin] = useState({
     name: '',
     code: '',
@@ -30,8 +33,10 @@ export function Login() {
 
 
   useEffect(() => {
+    setValidCode(false)
+    setInvalidCode(false)
     // Marcelo
-    if (adminSelected === 1) {
+    if (adminSelected === 2) {
       const admin = users.find(user => user.id === 'SEb2xpinxvIFFApltVx8')
 
       setAdmin({
@@ -40,7 +45,7 @@ export function Login() {
       })
 
     // João
-    } else if (adminSelected === 2) {
+    } else if (adminSelected === 1) {
       const admin = users.find(user => user.id === 'cs2wVZOB7eV68EJwcC4r')
 
       setAdmin({
@@ -72,19 +77,21 @@ export function Login() {
   const handleCode = (code) => {
     if (code == admin.code) {
       setInvalidCode(false)
+      setValidCode(true)
       if(adminSelected === 1) 
-        signInUid('#')
-      else if (adminSelected === 2)
         signInUid('WXSlfpeZg4Tyuve7QFCJ2BWGoYG2')
+      else if (adminSelected === 2)
+        signInUid('#')
     } else {
       setInvalidCode(true)
+      setValidCode(false)
     }
   }
 
   return (
     <Flex
       w='100%'
-      h='60%'
+      h='55%'
       justify='center'
       gap='40px'
       alignItems='center'
@@ -96,10 +103,10 @@ export function Login() {
             {(adminSelected === 1 || adminSelected === 0) && (
               <PopoverTrigger>
                 <Avatar
+                  name='João Vitral'
                   cursor='pointer'
                   size='xl'
-                  name='João Vitral'
-                  src='https://bit.ly/ryan-florence'
+                  src={joao_pic}
                   onClick={(e) => handleAdminSelect(e)}
                   transition='all 0.2s ease-in-out'
                   _hover={{
@@ -112,10 +119,10 @@ export function Login() {
             {(adminSelected === 2 || adminSelected === 0) && (
               <PopoverTrigger>
                 <Avatar
+                  name='Marcelo Bracet'
                   cursor='pointer'
                   size='xl'
-                  name='Marcelo Bracet'
-                  src='https://bit.ly/sage-adebayo'
+                  src={marcelo_pic}
                   onClick={(e) => handleAdminSelect(e)}
                   transition='all 0.2s ease-in-out'
                   _hover={{
@@ -128,7 +135,7 @@ export function Login() {
           </Wrap>
           <PopoverContent>
             <PopoverHeader
-              fontWeight='semibold'>{admin.name}</PopoverHeader>
+              fontWeight='semibold'>Bem-vindo, {admin.name}</PopoverHeader>
             <PopoverArrow />
             <PopoverCloseButton />
             <PopoverBody>
@@ -146,11 +153,11 @@ export function Login() {
                   autoFocus
                   type='alphanumeric'
                 >
-                    <PinInputField />
-                    <PinInputField />
-                    <PinInputField />
-                    <PinInputField />
-                  </PinInput>
+                  <PinInputField borderColor={validCode ? 'green' : invalidCode ? 'red' : 'gray' } />
+                  <PinInputField borderColor={validCode ? 'green' : invalidCode ? 'red' : 'gray' } />
+                  <PinInputField borderColor={validCode ? 'green' : invalidCode ? 'red' : 'gray' } />
+                  <PinInputField borderColor={validCode ? 'green' : invalidCode ? 'red' : 'gray' } />
+                </PinInput>
               </Flex>
             </PopoverBody>
           </PopoverContent>
@@ -165,13 +172,15 @@ export function Login() {
         bgColor='transparent'
         display='flex'
         flexDir='column'
+        border='1px solid #e0dede'
+        padding='10px'
         gap='10px'
         _hover={{ bgColor: 'transparent', transform: 'scale(1.04)' }}
       >
-          <Image
-            h='30px'
-            w='30px'
-            src='https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/2048px-Google_%22G%22_Logo.svg.png'
+        <Image
+          h='30px'
+          w='30px'
+          src='https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/2048px-Google_%22G%22_Logo.svg.png'
         />
         <Text
           textAlign='center'

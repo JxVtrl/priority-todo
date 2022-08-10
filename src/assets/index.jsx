@@ -1,0 +1,1 @@
+export { joao_pic, marcelo_pic, logo } from './img'
